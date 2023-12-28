@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'components/reusablecard.dart';
+
+enum Gender {
+  male,
+  female,
+}
 
 class Userdetails1 extends StatefulWidget {
   const Userdetails1({Key? key}) : super(key: key);
@@ -10,6 +16,7 @@ class Userdetails1 extends StatefulWidget {
 
 class _Userdetails1State extends State<Userdetails1> {
   List<bool> isSelected = [false, false, false]; // Initialize isSelected
+    Gender? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,7 @@ class _Userdetails1State extends State<Userdetails1> {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 100,
             ),
             Container(
               child: Row(
@@ -88,19 +95,50 @@ class _Userdetails1State extends State<Userdetails1> {
               ),
             ),
             SizedBox(height: 20),
-            ToggleButtons(
-              isSelected: isSelected,
-              onPressed: (int index) {
-                setState(() {
-                  isSelected[index] = !isSelected[index];
-                });
-              },
-              children: const <Widget>[
-              Icon(Icons.person), // Boy icon
-              Icon(Icons.face),
-                Icon(Icons.cake),
-              ],
-            ),
+          
+          Expanded(
+              child: Row(
+            children: <Widget>[
+              Expanded(
+                child: ReusableCard(
+                  onPress: () {
+                    setState(() {
+                      selectedGender = Gender.male;
+                    });
+                  },
+                  colour: selectedGender == Gender.male
+                      ? Colors.blue
+                      : Colors.pink
+                  // cardChild: IconContent(
+                  //   icon: FontAwesomeIcons.mars,
+                  //   label: 'MALE',
+                  // ),
+                ),
+              ),
+              Expanded(
+                child: ReusableCard(
+                  onPress: () {
+                    setState(() {
+                      selectedGender = Gender.female;
+                    });
+                  },
+                  colour: selectedGender == Gender.female
+                      ? Colors.deepOrange
+                      : Colors.brown,
+                  // cardChild: IconContent(
+                  //   icon: FontAwesomeIcons.venus,
+                  //   label: 'FEMALE',
+                  // ),
+                ),
+              ),
+              
+            ],
+          )
+          ),
+            
+          
+
+
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
