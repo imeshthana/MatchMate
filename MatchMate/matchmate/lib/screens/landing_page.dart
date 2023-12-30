@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/screens/login.dart';
+import '../components/main_button.dart';
 import 'create_account.dart';
-import 'components/main_button.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -17,13 +18,13 @@ class LandingPage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: ShaderMask(
               shaderCallback: (Rect bounds) {
-                return LinearGradient(
+                return const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Color(0xff241468), Color(0xFFC70039)],
                 ).createShader(bounds);
               },
-              child: Text(
+              child: const Text(
                 "MatchMate",
                 style: TextStyle(
                   fontSize: 40,
@@ -34,26 +35,26 @@ class LandingPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           Image.asset(
             "assets/1.jpg",
             height: 370,
           ),
-          SizedBox(height: 100),
+          const SizedBox(height: 100),
 
           MainButton(
             text: 'Get Started',
             onPress: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CreateAccount()));
+                  MaterialPageRoute(builder: (context) => const CreateAccount()));
             },
           ),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           Container(
             alignment: Alignment.topCenter,
-            child: Text(
+            child: const Text(
               "Already have an account",
               style: TextStyle(
                 color: Color(0xff241468),
@@ -68,17 +69,18 @@ class LandingPage extends StatelessWidget {
             child: Center(
               child: TextButton(
                 onPressed: () {
-                  // Your button click logic here
+                 Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Login()));
                 },
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    return LinearGradient(
+                    return const LinearGradient(
                       colors: [Color(0xff241468), Color(0xFFC70039)],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ).createShader(bounds);
                   },
-                  child: Text(
+                  child: const Text(
                     'Log In',
                     style: TextStyle(
                       fontSize: 20.0,
@@ -95,4 +97,3 @@ class LandingPage extends StatelessWidget {
     );
   }
 }
-
