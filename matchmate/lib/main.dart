@@ -18,6 +18,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: 'MatchMate', home: LandingPage());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'MatchMate',
+      home: LandingPage(),
+    );
   }
 }

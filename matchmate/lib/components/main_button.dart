@@ -38,7 +38,6 @@ class MainButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
             ),
           ),
         ),
@@ -48,8 +47,8 @@ class MainButton extends StatelessWidget {
 }
 
 class RoundIconButton extends StatelessWidget {
- const RoundIconButton({Key? key, required this.icon, required this.onPressed}) : super(key: key);
-
+  const RoundIconButton({Key? key, required this.icon, required this.onPressed})
+      : super(key: key);
 
   final IconData icon;
   final Function onPressed;

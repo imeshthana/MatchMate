@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MessageButton extends StatelessWidget {
-  const MessageButton({
-    super.key,
-  });
+  MessageButton({super.key, this.cardChild, this.onPress});
+
+  Widget? cardChild;
+  VoidCallback? onPress;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: onPress,
       backgroundColor: Colors.transparent,
       elevation: 5,
       shape: RoundedRectangleBorder(
@@ -24,7 +25,7 @@ class MessageButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(20.0),
         ),
-        child: Icon(Icons.message), // Icon goes here
+        child: cardChild, // Icon goes here
         padding: EdgeInsets.all(16.0), // Adjust padding as needed
       ),
     );

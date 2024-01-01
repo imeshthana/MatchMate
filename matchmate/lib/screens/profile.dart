@@ -10,7 +10,9 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: MessageButton(),
+      floatingActionButton: MessageButton(
+        cardChild: Icon(Icons.message),
+      ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: Appbar(),
       body: SingleChildScrollView(
@@ -114,39 +116,37 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        child: Text(
-                          "25",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17.5,
-                            fontWeight: FontWeight.w900,
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            child: Text(
+                              "25",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17.5,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "yrs",
-                        style: TextStyle(
-                          color: Color.fromRGBO(36, 20, 104, 0.6),
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.w700,
-                        ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "yrs",
+                            style: TextStyle(
+                              color: Color.fromRGBO(36, 20, 104, 0.6),
+                              fontSize: 17.5,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 0,
+                    height: 20,
                   ),
                   Row(
                     children: [
@@ -334,4 +334,3 @@ class Profile extends StatelessWidget {
     );
   }
 }
-

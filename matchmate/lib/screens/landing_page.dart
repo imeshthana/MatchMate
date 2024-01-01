@@ -37,16 +37,16 @@ class LandingPage extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Image.asset(
-            "assets/1.jpg",
-            height: 370,
+            "assets/logo.jpg",
+            height: 300,
           ),
           const SizedBox(height: 100),
 
           MainButton(
             text: 'Get Started',
             onPress: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const CreateAccount()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CreateAccount()));
             },
           ),
 
@@ -69,8 +69,8 @@ class LandingPage extends StatelessWidget {
             child: Center(
               child: TextButton(
                 onPressed: () {
-                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Login()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const Login()));
                 },
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
