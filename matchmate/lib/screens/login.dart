@@ -31,11 +31,11 @@ class Login extends StatelessWidget {
 
             const SizedBox(height: 50,),
 
-            reusableTextField('Enter Your Username', false, usernameController, "Enter Your Username"), 
+            ReusableTextField('Enter Your Username', false, usernameController, "Enter Your Username"), 
             
             const SizedBox(height: 30,),
             
-            reusableTextField('Enter Your Password', true, passwordController, "Enter Your Password"),
+            ReusableTextField('Enter Your Password', true, passwordController, "Enter Your Password"),
             
             const SizedBox( height: 30,),
            

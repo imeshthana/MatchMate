@@ -10,7 +10,7 @@ class MainImage extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.25,
       child: Image.asset(
-        "assets/1.jpg",
+        "assets/logo.jpg",
         height: 250,
       ),
     );

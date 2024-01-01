@@ -1,27 +1,40 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/appbar.dart';
+import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/components/profile_pic.dart';
 import 'package:matchmate/models/cities_model.dart';
 import 'package:matchmate/models/country_state_model.dart' as cs_model;
 import 'package:matchmate/screens/country_state_city_repo.dart';
 import 'package:matchmate/components/image_picker.dart';
 import 'package:matchmate/components/reusable_card.dart';
+import 'package:matchmate/screens/match_mates.dart';
 
+late User? loggedInUser;
+final _fireStore = FirebaseFirestore.instance;
 
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Userdetails2 extends StatefulWidget {
+  Userdetails2(
+      {required this.userName,
+      required this.lastName,
+      required this.firstName,
+      required this.age,
+      required this.gender});
+  final String userName;
+  final String firstName;
+  final String lastName;
+  final int age;
+  final String gender;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Userdetails2> createState() => _Userdetails2State();
 }
 
-class _HomePageState extends State<HomePage> {
-  
- 
+class _Userdetails2State extends State<Userdetails2> {
   final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
-  
+  final _auth = FirebaseAuth.instance;
+
   // PickedFile? _imageFile;
   // final ImagePicker _picker = ImagePicker();
 
@@ -29,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   List<String> states = [];
   List<String> cities = [];
   cs_model.CountryStateModel countryStateModel =
-  cs_model.CountryStateModel(error: false, msg: '', data: []);
+      cs_model.CountryStateModel(error: false, msg: '', data: []);
 
   CitiesModel citiesModel = CitiesModel(error: false, msg: '', data: []);
 
@@ -37,12 +50,25 @@ class _HomePageState extends State<HomePage> {
   String selectedState = 'Select State';
   String selectedCity = 'Select City';
   bool isDataLoaded = false;
-
+  String? bio;
 
   String finalTextToBeDisplayed = '';
 
+  @override
+  void initState() {
+    getCountries();
+    getCurrentUser();
+    super.initState();
+  }
+
+  void getCurrentUser() async {
+    final user = await _auth.currentUser;
+    if (user != null) {
+      loggedInUser = user;
+    }
+  }
+
   getCountries() async {
-    //
     countryStateModel = await _countryStateCityRepo.getCountriesStates();
     countries.add('Select Country');
     states.add('Select State');
@@ -52,29 +78,23 @@ class _HomePageState extends State<HomePage> {
     }
     isDataLoaded = true;
     setState(() {});
-    //
   }
 
   getStates() async {
-    //
     for (var element in countryStateModel.data) {
       if (selectedCountry == element.name) {
-        //
         setState(() {
           resetStates();
           resetCities();
         });
-        //
         for (var state in element.states) {
           states.add(state.name);
         }
       }
     }
-    //
   }
 
   getCities() async {
-    //
     isDataLoaded = false;
     citiesModel = await _countryStateCityRepo.getCities(
         country: selectedCountry, state: selectedState);
@@ -86,7 +106,6 @@ class _HomePageState extends State<HomePage> {
     }
     isDataLoaded = true;
     setState(() {});
-    //
   }
 
   resetCities() {
@@ -103,99 +122,117 @@ class _HomePageState extends State<HomePage> {
     finalTextToBeDisplayed = '';
   }
 
-  @override
-  void initState() {
-    getCountries();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
-      body: 
-      Center(
-       child: !isDataLoaded
-           ? const CircularProgressIndicator()
-           : Padding(
-               padding: const EdgeInsets.all(20.0),
-               child: Column(
-                 children: [
-                   Column(
-                     children: [
-                       Row(
-                         children: [
-                           Expanded(
-                             child: Text(
-                               "your contry"
-                             ),
-                           ),
-                           Expanded(
-                             child: DropdownButton(
-                                 isExpanded: true,
-                                 value: selectedCountry,
-                                 items: countries
-                                     .map((String country) => DropdownMenuItem(
-                                         value: country, child: Text(country)))
-                                     .toList(),
-                                 onChanged: (selectedValue) {
-                                   //
-                                   setState(() {
-                                     selectedCountry = selectedValue!;
-                                   });
-                                   
-                                   if (selectedCountry != 'Select Country') {
-                                     getStates();
-                                   }
-                                   //
-                                 }),
-                           ),
-                         ],
-                       ),
-                       const SizedBox(height: 20),
-                                        Row(
-                               children: [
-                                 Expanded(
-                                   child: Text(
-                              "Your State",
-                              style: TextStyle(fontSize: 16),
-                                   ),
-                                 ),
-                                 Expanded(
-                                   child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedState,
-                              items: states
-                                  .map((String state) =>
-                                      DropdownMenuItem(value: state, child: Text(state)))
-                                  .toList(),
-                              onChanged: (selectedValue) {
-                                setState(() {
-                                  selectedState = selectedValue!;
-                                });
-                                if (selectedState != 'Select State') {
-                                  getCities();
-                                }
-                              },
-                                   ),
-                                 ),
-                               ],
-                             ),
-                     ],
-                   ),
-         const SizedBox(height: 20),
-      
-      
-      
-        AddYouBioCard(),
-      
-        //imageProfile(context),
-      
-      
-       ],
-       ),
+      body: Center(
+        child:
+            
+             Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Your Region"),
+                            ),
+                            Expanded(
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  value: selectedCountry,
+                                  items: countries
+                                      .map((String country) => DropdownMenuItem(
+                                          value: country, child: Text(country)))
+                                      .toList(),
+                                  onChanged: (selectedValue) {
+                                    setState(() {
+                                      selectedCountry = selectedValue!;
+                                    });
+
+                                    if (selectedCountry != 'Select Country') {
+                                      getStates();
+                                    }
+                                  }),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Your State",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Expanded(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedState,
+                                items: states
+                                    .map((String state) => DropdownMenuItem(
+                                        value: state, child: Text(state)))
+                                    .toList(),
+                                onChanged: (selectedValue) {
+                                  setState(() {
+                                    selectedState = selectedValue!;
+                                  });
+                                  if (selectedState != 'Select State') {
+                                    getCities();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          bio = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Add Your Bio',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 4,
+                    ),
+                    //imageProfile(context),
+                    Spacer(),
+                    MainButton(
+                      text: 'Create Your Account',
+                      onPress: () async {
+                        await _fireStore
+                            .collection('profiles')
+                            .doc(widget.userName)
+                            .set({
+                          'firstname': widget.firstName,
+                          'lastname': widget.lastName,
+                          'age': widget.age,
+                          'gender':widget.gender,
+                          'country': selectedCountry,
+                          'state': selectedState,
+                          'bio': bio,
+                        });
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MatchMates()));
+                      },
+                    )
+                  ],
+                ),
+              ),
       ),
-            ),
     );
   }
 }
