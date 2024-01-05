@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:matchmate/components/appbar.dart';
+import 'package:matchmate/components/appbar2.dart';
+import 'package:matchmate/components/constants.dart';
 import 'package:matchmate/components/main_button.dart';
-import 'package:matchmate/components/profile_pic.dart';
 import 'package:matchmate/models/cities_model.dart';
 import 'package:matchmate/models/country_state_model.dart' as cs_model;
 import 'package:matchmate/screens/country_state_city_repo.dart';
@@ -20,12 +21,15 @@ class Userdetails2 extends StatefulWidget {
       required this.lastName,
       required this.firstName,
       required this.age,
-      required this.gender});
+      required this.gender,
+      required this.occupation});
+
   final String userName;
   final String firstName;
   final String lastName;
   final int age;
   final String gender;
+  final String occupation;
 
   @override
   State<Userdetails2> createState() => _Userdetails2State();
@@ -34,6 +38,11 @@ class Userdetails2 extends StatefulWidget {
 class _Userdetails2State extends State<Userdetails2> {
   final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
   final _auth = FirebaseAuth.instance;
+
+  TextEditingController preferenceController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
+
+  List<String> preferences = [];
 
   // PickedFile? _imageFile;
   // final ImagePicker _picker = ImagePicker();
@@ -59,6 +68,22 @@ class _Userdetails2State extends State<Userdetails2> {
     getCountries();
     getCurrentUser();
     super.initState();
+  }
+
+  void addPreference() {
+    String newPreference = preferenceController.text.trim();
+    if (newPreference.isNotEmpty && preferences.length < 3) {
+      setState(() {
+        preferences.add(newPreference);
+        preferenceController.clear();
+      });
+    }
+  }
+
+  void removePreference(String preference) {
+    setState(() {
+      preferences.remove(preference);
+    });
   }
 
   void getCurrentUser() async {
@@ -122,116 +147,210 @@ class _Userdetails2State extends State<Userdetails2> {
     finalTextToBeDisplayed = '';
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
       body: Center(
-        child:
-            
-             Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text("Your Region"),
-                            ),
-                            Expanded(
-                              child: DropdownButton(
-                                  isExpanded: true,
-                                  value: selectedCountry,
-                                  items: countries
-                                      .map((String country) => DropdownMenuItem(
-                                          value: country, child: Text(country)))
-                                      .toList(),
-                                  onChanged: (selectedValue) {
-                                    setState(() {
-                                      selectedCountry = selectedValue!;
-                                    });
-
-                                    if (selectedCountry != 'Select Country') {
-                                      getStates();
-                                    }
-                                  }),
-                            ),
-                          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Your Country",
+                          style: textStyle,
                         ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Your State",
-                                style: TextStyle(fontSize: 16),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              border: GradientBoxBorder(
+                                  gradient: gradient, width: 2.5)),
+                          child: DropdownButton(
+                              isExpanded: true,
+                              value: selectedCountry,
+                              underline: Container(),
+                              items: countries
+                                  .map((String country) => DropdownMenuItem(
+                                      value: country,
+                                      child: Text(
+                                        country,
+                                        style: textStyle,
+                                      )))
+                                  .toList(),
+                              onChanged: (selectedValue) {
+                                setState(() {
+                                  selectedCountry = selectedValue!;
+                                });
+
+                                if (selectedCountry != 'Select Country') {
+                                  getStates();
+                                }
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Your State",
+                          style: textStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              border: GradientBoxBorder(
+                                  gradient: gradient, width: 2.5)),
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: selectedState,
+                            underline: Container(),
+                            items: states
+                                .map((String state) => DropdownMenuItem(
+                                    value: state,
+                                    child: Text(
+                                      state,
+                                      style: textStyle,
+                                    )))
+                                .toList(),
+                            onChanged: (selectedValue) {
+                              setState(() {
+                                selectedState = selectedValue!;
+                              });
+                              if (selectedState != 'Select State') {
+                                getCities();
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25),
+              TextField(
+                controller: bioController,
+                decoration: InputDecoration(
+                  hintText: 'Add Your Bio',
+                  hintStyle: hintTextStyle,
+                  border: GradientOutlineInputBorder(
+                    gradient: gradient,
+                    width: 2.5,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                ),
+                maxLines: 4,
+              ),
+
+              const SizedBox(height: 25),
+
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                    border: GradientBoxBorder(gradient: gradient, width: 2.5)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: preferenceController,
+                        decoration: InputDecoration(
+                          hintText: 'Add Preference',
+                          hintStyle: hintTextStyle,
+                          border: InputBorder.none,
+                          suffixIcon: IconButton(
+                              icon: ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return gradient.createShader(bounds);
+                                },
+                                child: Icon(
+                                  Icons.add,
+                                  size: 30.0,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: DropdownButton(
-                                isExpanded: true,
-                                value: selectedState,
-                                items: states
-                                    .map((String state) => DropdownMenuItem(
-                                        value: state, child: Text(state)))
-                                    .toList(),
-                                onChanged: (selectedValue) {
-                                  setState(() {
-                                    selectedState = selectedValue!;
-                                  });
-                                  if (selectedState != 'Select State') {
-                                    getCities();
-                                  }
+                              onPressed: () {
+                                addPreference();
+                              }),
+                        ),
+                      ),
+                      Wrap(
+                        spacing: 8.0,
+                        runSpacing: 0,
+                        children: preferences
+                            .map(
+                              (preference) => Chip(
+                                deleteIconColor: kColor1,
+                                backgroundColor:
+                                    Color.fromRGBO(199, 0, 57, 0.8),
+                                label: Text(
+                                  preference,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onDeleted: () {
+                                  removePreference(preference);
                                 },
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          bio = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Add Your Bio',
-                        border: OutlineInputBorder(),
+                            )
+                            .toList(),
                       ),
-                      maxLines: 4,
-                    ),
-                    //imageProfile(context),
-                    Spacer(),
-                    MainButton(
-                      text: 'Create Your Account',
-                      onPress: () async {
-                        await _fireStore
-                            .collection('profiles')
-                            .doc(widget.userName)
-                            .set({
-                          'firstname': widget.firstName,
-                          'lastname': widget.lastName,
-                          'age': widget.age,
-                          'gender':widget.gender,
-                          'country': selectedCountry,
-                          'state': selectedState,
-                          'bio': bio,
-                        });
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MatchMates()));
-                      },
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
+
+              //imageProfile(context),
+              Spacer(),
+              MainButton(
+                text: 'Create Your Account',
+                onPress: () async {
+                  await _fireStore
+                      .collection('profiles')
+                      .doc(widget.userName)
+                      .set({
+                    'firstname': widget.firstName,
+                    'lastname': widget.lastName,
+                    'age': widget.age,
+                    'gender':widget.gender,
+                    'occupation': widget.occupation,
+                    'country': selectedCountry,
+                    'state': selectedState,
+                    'bio': bio,
+                    'preferences': preferences,
+                  });
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MatchMates()));
+                },
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

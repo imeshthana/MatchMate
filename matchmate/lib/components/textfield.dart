@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_borders/gradient_borders.dart';
+import 'package:matchmate/components/constants.dart';
 
 TextField ReusableTextField(String? text, bool isPasswordType,
     TextEditingController? controller, String hintText) {
@@ -8,18 +10,15 @@ TextField ReusableTextField(String? text, bool isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      labelText: text,
-      hintText: hintText,
-      hintStyle: TextStyle(
-        color: Color.fromRGBO(36, 20, 104, 0.6),
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        // labelText: text,
+        hintText: hintText,
+        hintStyle: hintTextStyle,
+        border: GradientOutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            gradient: gradient,
+            width: 2.5)),
     keyboardType: isPasswordType
         ? TextInputType.visiblePassword
         : TextInputType.emailAddress,

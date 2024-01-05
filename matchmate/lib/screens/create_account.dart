@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/screens/userdetails1.dart';
 import '../components/textfield.dart';
-import '../components/appbar.dart';
+import '../components/appbar2.dart';
 import '../components/image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -27,10 +27,10 @@ class _CreateAccountState extends State<CreateAccount> {
         padding: const EdgeInsets.all(40.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children: [
             const MainImage(),
             const SizedBox(
-              height: 50,
+              height: 80,
             ),
             ReusableTextField('Enter Your Username', false, usernameController,
                 "Enter Your Username"),
@@ -47,13 +47,14 @@ class _CreateAccountState extends State<CreateAccount> {
             const SizedBox(
               height: 30,
             ),
+            Spacer(),
             MainButton(
               text: "Next",
               onPress: () async {
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                  email: emailController.text,
-                  password: passwordController.text,
-                );
+                // await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                //   email: emailController.text,
+                //   password: passwordController.text,
+                // );
                 Navigator.push(
                     context,
                     MaterialPageRoute(

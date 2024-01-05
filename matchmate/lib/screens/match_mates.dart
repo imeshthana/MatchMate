@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matchmate/components/mate_card.dart';
 import '../components/constants.dart';
 import '../components/search_bar.dart';
-import '../components/app_bar.dart';
+import '../components/appbar1.dart';
 
 class MatchMates extends StatefulWidget {
   const MatchMates({super.key});
@@ -28,11 +28,7 @@ class _MatchMatesState extends State<MatchMates> {
             padding: EdgeInsets.only(left: 20, top: 20),
             child: Text(
               "Your Matchmates",
-              style: TextStyle(
-                color: Color.fromRGBO(36, 20, 104, 0.6),
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-              ),
+              style: textStyle,
             ),
           ),
           SizedBox(
@@ -106,4 +102,3 @@ class _MatchMatesState extends State<MatchMates> {
     );
   }
 }
-

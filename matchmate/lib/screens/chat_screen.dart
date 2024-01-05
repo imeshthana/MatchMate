@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/screens/favourites_screen.dart';
 import '../components/constants.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -20,15 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
-            gradient: LinearGradient(
-              stops: [0.4, 1],
-              colors: [
-                Color(0xff241468),
-                Color(0xFFC70039)
-              ], // Add your gradient colors here
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            gradient: gradient
           ),
         ),
         title: Container(
@@ -57,7 +50,8 @@ class _ChatScreenState extends State<ChatScreen> {
             icon: Icon(Icons.logout),
             color: Colors.white,
             onPressed: () {
-              // Handle the onPressed event for the love icon
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FavouritesScreen()));
             },
           ),
         ],
@@ -108,11 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xff241468), Color(0xFFC70039)],
-                    ),
+                    gradient: gradient,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Icon(

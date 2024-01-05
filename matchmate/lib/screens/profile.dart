@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:matchmate/components/app_bar.dart';
+import 'package:matchmate/components/appbar1.dart';
+import 'package:matchmate/screens/chat_screen.dart';
 import '../components/constants.dart';
 import '../components/message_button.dart';
 
@@ -12,6 +13,10 @@ class Profile extends StatelessWidget {
       backgroundColor: Colors.white,
       floatingActionButton: MessageButton(
         cardChild: Icon(Icons.message),
+        onPress: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const ChatScreen()));
+        },
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: Appbar(),
@@ -59,11 +64,7 @@ class Profile extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: ShaderMask(
                       shaderCallback: (Rect bounds) {
-                        return LinearGradient(
-                          colors: [Color(0xff241468), Color(0xFFC70039)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ).createShader(bounds);
+                        return gradient.createShader(bounds);
                       },
                       child: Text(
                         'Arjun Aryan',
@@ -93,11 +94,7 @@ class Profile extends StatelessWidget {
                             Container(
                               child: Text(
                                 "Title",
-                                style: TextStyle(
-                                  color: Color.fromRGBO(36, 20, 104, 0.6),
-                                  fontSize: 17.5,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: textStyle,
                               ),
                             ),
                             SizedBox(
@@ -133,14 +130,7 @@ class Profile extends StatelessWidget {
                           SizedBox(
                             width: 5,
                           ),
-                          Text(
-                            "yrs",
-                            style: TextStyle(
-                              color: Color.fromRGBO(36, 20, 104, 0.6),
-                              fontSize: 17.5,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                          Text("yrs", style: textStyle),
                         ],
                       ),
                     ],
@@ -150,14 +140,7 @@ class Profile extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "From",
-                        style: TextStyle(
-                          color: Color.fromRGBO(36, 20, 104, 0.6),
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text("From", style: textStyle),
                       SizedBox(
                         width: 15,
                       ),
@@ -178,14 +161,7 @@ class Profile extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "Bio",
-                        style: TextStyle(
-                          color: Color.fromRGBO(36, 20, 104, 0.6),
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text("Bio", style: textStyle),
                     ],
                   ),
                   Row(
@@ -210,14 +186,7 @@ class Profile extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "Preferences",
-                        style: TextStyle(
-                          color: Color.fromRGBO(36, 20, 104, 0.6),
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text("Preferences", style: textStyle),
                     ],
                   ),
                   SizedBox(
