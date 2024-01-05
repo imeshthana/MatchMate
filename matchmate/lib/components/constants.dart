@@ -1,48 +1,23 @@
 import 'package:flutter/material.dart';
 
+const kColor1 = Color(0xff241468);
+const kColour2 = Color(0xFFC70039);
+
 LinearGradient gradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
-  colors: [Color(0xff241468), Color(0xFFC70039)],
+  colors: [kColor1, kColour2],
   tileMode: TileMode.clamp,
 );
 
-const kBottomContainerHeight = 80.0;
-const kActiveCardColour = Color(0xFF1D1E33);
-const kInactiveCardColour = Color(0xFF111328);
-const kBottomContainerColour = Color(0xFFEB1555);
-
-const kLabelTextStyle = TextStyle(
-  fontSize: 18.0,
-  color: Color(0xFF8D8E98),
+TextStyle textStyle = TextStyle(
+  color: Color.fromRGBO(36, 20, 104, 0.6),
+  fontSize: 15,
+  fontWeight: FontWeight.w700,
 );
 
-const kNumberTextStyle = TextStyle(
-  fontSize: 50.0,
-  fontWeight: FontWeight.w900,
-);
-
-const kLargeButtonTextStyle = TextStyle(
-  fontSize: 25.0,
-  fontWeight: FontWeight.bold,
-);
-
-const kTitleTextStyle = TextStyle(
-  fontSize: 50.0,
-  fontWeight: FontWeight.bold,
-);
-
-const kResultTextStyle = TextStyle(
-  color: Color(0xFF24D876),
-  fontSize: 22.0,
-  fontWeight: FontWeight.bold,
-);
-
-const kBMITextStyle = TextStyle(
-  fontSize: 100.0,
-  fontWeight: FontWeight.bold,
-);
-
-const kBodyTextStyle = TextStyle(
-  fontSize: 22.0,
+TextStyle hintTextStyle = TextStyle(
+  color: Color.fromRGBO(36, 20, 104, 0.4),
+  fontSize: 15,
+  fontWeight: FontWeight.w700,
 );

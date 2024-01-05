@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/screens/favourites_screen.dart';
+import 'package:matchmate/screens/profile.dart';
 import 'constants.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
@@ -36,7 +38,8 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
             child: Icon(Icons.favorite),
           ),
           onPressed: () {
-            // Handle the onPressed event for the love icon
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const FavouritesScreen()));
           },
         ),
         IconButton(
@@ -50,7 +53,8 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           onPressed: () {
-            // Handle the onPressed event for the profile icon
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const Profile()));
           },
         ),
       ],

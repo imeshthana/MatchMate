@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:matchmate/components/appbar.dart';
+import 'package:matchmate/components/appbar2.dart';
+import 'package:matchmate/components/constants.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/models/cities_model.dart';
 import 'package:matchmate/models/country_state_model.dart' as cs_model;
@@ -18,12 +20,15 @@ class Userdetails2 extends StatefulWidget {
       required this.lastName,
       required this.firstName,
       required this.age,
-      required this.gender});
+      required this.gender,
+      required this.occupation});
+
   final String userName;
   final String firstName;
   final String lastName;
   final int age;
   final String gender;
+  final String occupation;
 
   @override
   State<Userdetails2> createState() => _Userdetails2State();
@@ -32,6 +37,11 @@ class Userdetails2 extends StatefulWidget {
 class _Userdetails2State extends State<Userdetails2> {
   final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
   final _auth = FirebaseAuth.instance;
+
+  TextEditingController preferenceController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
+
+  List<String> preferences = [];
 
   // PickedFile? _imageFile;
   // final ImagePicker _picker = ImagePicker();
@@ -57,6 +67,22 @@ class _Userdetails2State extends State<Userdetails2> {
     getCountries();
     getCurrentUser();
     super.initState();
+  }
+
+  void addPreference() {
+    String newPreference = preferenceController.text.trim();
+    if (newPreference.isNotEmpty && preferences.length < 3) {
+      setState(() {
+        preferences.add(newPreference);
+        preferenceController.clear();
+      });
+    }
+  }
+
+  void removePreference(String preference) {
+    setState(() {
+      preferences.remove(preference);
+    });
   }
 
   void getCurrentUser() async {
@@ -125,111 +151,110 @@ class _Userdetails2State extends State<Userdetails2> {
     return Scaffold(
       appBar: const Appbar(),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Your Region"),
-                      ),
-                      Expanded(
-                        child: DropdownButton(
-                            isExpanded: true,
-                            value: selectedCountry,
-                            items: countries
-                                .map((String country) => DropdownMenuItem(
-                                    value: country, child: Text(country)))
-                                .toList(),
-                            onChanged: (selectedValue) {
-                              setState(() {
-                                selectedCountry = selectedValue!;
-                              });
+        child:
+            
+             Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Your Region"),
+                            ),
+                            Expanded(
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  value: selectedCountry,
+                                  items: countries
+                                      .map((String country) => DropdownMenuItem(
+                                          value: country, child: Text(country)))
+                                      .toList(),
+                                  onChanged: (selectedValue) {
+                                    setState(() {
+                                      selectedCountry = selectedValue!;
+                                    });
 
-                              if (selectedCountry != 'Select Country') {
-                                getStates();
-                              }
-                            }),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Your State",
-                          style: TextStyle(fontSize: 16),
+                                    if (selectedCountry != 'Select Country') {
+                                      getStates();
+                                    }
+                                  }),
+                            ),
+                          ],
                         ),
-                      ),
-                      Expanded(
-                        child: DropdownButton(
-                          isExpanded: true,
-                          value: selectedState,
-                          items: states
-                              .map((String state) => DropdownMenuItem(
-                                  value: state, child: Text(state)))
-                              .toList(),
-                          onChanged: (selectedValue) {
-                            setState(() {
-                              selectedState = selectedValue!;
-                            });
-                            if (selectedState != 'Select State') {
-                              getCities();
-                            }
-                          },
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Your State",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Expanded(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedState,
+                                items: states
+                                    .map((String state) => DropdownMenuItem(
+                                        value: state, child: Text(state)))
+                                    .toList(),
+                                onChanged: (selectedValue) {
+                                  setState(() {
+                                    selectedState = selectedValue!;
+                                  });
+                                  if (selectedState != 'Select State') {
+                                    getCities();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          bio = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Add Your Bio',
+                        border: OutlineInputBorder(),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    bio = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Add Your Bio',
-                  border: OutlineInputBorder(),
+                      maxLines: 4,
+                    ),
+                    //imageProfile(context),
+                    Spacer(),
+                    MainButton(
+                      text: 'Create Your Account',
+                      onPress: () async {
+                        await _fireStore
+                            .collection('profiles')
+                            .doc(widget.userName)
+                            .set({
+                          'firstname': widget.firstName,
+                          'lastname': widget.lastName,
+                          'age': widget.age,
+                          'gender':widget.gender,
+                          'country': selectedCountry,
+                          'state': selectedState,
+                          'bio': bio,
+                        });
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MatchMates()));
+                      },
+                    )
+                  ],
                 ),
-                maxLines: 4,
               ),
-              //imageProfile(context),
-              Spacer(),
-
-             ImagePickerWidget(),
-
-              MainButton(
-                text: 'Create Your Account',
-                onPress: () async {
-                  // await _fireStore
-                  //     .collection('profiles')
-                  //     .doc(widget.userName)
-                  //     .set({
-                  //   'firstname': widget.firstName,
-                  //   'lastname': widget.lastName,
-                  //   'age': widget.age,
-                  //   'gender':widget.gender,
-                  //   'country': selectedCountry,
-                  //   'state': selectedState,
-                  //   'bio': bio,
-                  // });
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MatchMates()));
-                },
-              )
-            ],
-          ),
-        ),
       ),
     );
   }

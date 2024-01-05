@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matchmate/components/app_bar.dart';
+import 'package:matchmate/components/appbar1.dart';
 import '../components/constants.dart';
 import '../components/search_bar.dart';
 
@@ -33,11 +33,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
               padding: EdgeInsets.only(left: 20, top: 20),
               child: Text(
                 "Your Favourites",
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 20, 104, 0.6),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: textStyle,
               ),
             ),
             SizedBox(
@@ -70,15 +66,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: [0.2, 1],
-                                colors: [
-                                  Color.fromARGB(255, 21, 11, 64),
-                                  Color(0xFFC70039)
-                                ],
-                              ),
+                              gradient: gradient,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                             child: Row(
