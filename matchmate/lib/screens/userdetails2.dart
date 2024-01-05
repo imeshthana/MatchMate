@@ -3,12 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/appbar.dart';
 import 'package:matchmate/components/main_button.dart';
-import 'package:matchmate/components/profile_pic.dart';
 import 'package:matchmate/models/cities_model.dart';
 import 'package:matchmate/models/country_state_model.dart' as cs_model;
 import 'package:matchmate/screens/country_state_city_repo.dart';
 import 'package:matchmate/components/image_picker.dart';
-import 'package:matchmate/components/reusable_card.dart';
 import 'package:matchmate/screens/match_mates.dart';
 
 late User? loggedInUser;
@@ -122,116 +120,116 @@ class _Userdetails2State extends State<Userdetails2> {
     finalTextToBeDisplayed = '';
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
       body: Center(
-        child:
-            
-             Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text("Your Region"),
-                            ),
-                            Expanded(
-                              child: DropdownButton(
-                                  isExpanded: true,
-                                  value: selectedCountry,
-                                  items: countries
-                                      .map((String country) => DropdownMenuItem(
-                                          value: country, child: Text(country)))
-                                      .toList(),
-                                  onChanged: (selectedValue) {
-                                    setState(() {
-                                      selectedCountry = selectedValue!;
-                                    });
-
-                                    if (selectedCountry != 'Select Country') {
-                                      getStates();
-                                    }
-                                  }),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Your State",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            Expanded(
-                              child: DropdownButton(
-                                isExpanded: true,
-                                value: selectedState,
-                                items: states
-                                    .map((String state) => DropdownMenuItem(
-                                        value: state, child: Text(state)))
-                                    .toList(),
-                                onChanged: (selectedValue) {
-                                  setState(() {
-                                    selectedState = selectedValue!;
-                                  });
-                                  if (selectedState != 'Select State') {
-                                    getCities();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          bio = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Add Your Bio',
-                        border: OutlineInputBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Your Region"),
                       ),
-                      maxLines: 4,
-                    ),
-                    //imageProfile(context),
-                    Spacer(),
-                    MainButton(
-                      text: 'Create Your Account',
-                      onPress: () async {
-                        await _fireStore
-                            .collection('profiles')
-                            .doc(widget.userName)
-                            .set({
-                          'firstname': widget.firstName,
-                          'lastname': widget.lastName,
-                          'age': widget.age,
-                          'gender':widget.gender,
-                          'country': selectedCountry,
-                          'state': selectedState,
-                          'bio': bio,
-                        });
+                      Expanded(
+                        child: DropdownButton(
+                            isExpanded: true,
+                            value: selectedCountry,
+                            items: countries
+                                .map((String country) => DropdownMenuItem(
+                                    value: country, child: Text(country)))
+                                .toList(),
+                            onChanged: (selectedValue) {
+                              setState(() {
+                                selectedCountry = selectedValue!;
+                              });
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MatchMates()));
-                      },
-                    )
-                  ],
-                ),
+                              if (selectedCountry != 'Select Country') {
+                                getStates();
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Your State",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Expanded(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          value: selectedState,
+                          items: states
+                              .map((String state) => DropdownMenuItem(
+                                  value: state, child: Text(state)))
+                              .toList(),
+                          onChanged: (selectedValue) {
+                            setState(() {
+                              selectedState = selectedValue!;
+                            });
+                            if (selectedState != 'Select State') {
+                              getCities();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+              const SizedBox(height: 20),
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    bio = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Add Your Bio',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 4,
+              ),
+              //imageProfile(context),
+              Spacer(),
+
+             ImagePickerWidget(),
+
+              MainButton(
+                text: 'Create Your Account',
+                onPress: () async {
+                  // await _fireStore
+                  //     .collection('profiles')
+                  //     .doc(widget.userName)
+                  //     .set({
+                  //   'firstname': widget.firstName,
+                  //   'lastname': widget.lastName,
+                  //   'age': widget.age,
+                  //   'gender':widget.gender,
+                  //   'country': selectedCountry,
+                  //   'state': selectedState,
+                  //   'bio': bio,
+                  // });
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MatchMates()));
+                },
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
