@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/textfield.dart';
 import 'constants.dart';
 
 class Searchbar extends StatelessWidget {
@@ -30,37 +31,9 @@ class Searchbar extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              height: 50,
-              child: TextField(
-                textAlign: TextAlign.left,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 2.0, // Set the desired border width when focused
-                      color: Color(
-                          0xFFC70039), // Set the desired border color when focused
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 2.0, // Set the desired border width
-                      // Use LinearGradient for a gradient border
-                      color: Color(0xff241468),
-                    ),
-                  ),
-                  labelText: null,
-                  hintText: 'Search Your Mate...',
-                  hintStyle: TextStyle(
-                    color: Color.fromRGBO(36, 20, 104, 0.6),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
+                height: 50,
+                child: ReusableTextField(
+                    null, false, null, 'Search Your Mate...')),
           ),
         ],
       ),

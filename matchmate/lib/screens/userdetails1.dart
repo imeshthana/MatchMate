@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:matchmate/components/image.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/components/message_button.dart';
 import 'package:matchmate/components/textfield.dart';
 import '../components/reusable_card.dart';
-import '../components/appbar.dart';
+import '../components/appbar2.dart';
 import 'package:matchmate/components/constants.dart';
 import 'package:matchmate/screens/userdetails2.dart';
 
@@ -31,6 +32,8 @@ class Userdetails1 extends StatefulWidget {
 class _Userdetails1State extends State<Userdetails1> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
+  TextEditingController occupationController = TextEditingController();
+
   List<bool> isSelected = [false, false, false];
   final _auth = FirebaseAuth.instance;
   Gender? selectedGender;
@@ -61,7 +64,7 @@ class _Userdetails1State extends State<Userdetails1> {
           children: [
             const MainImage(),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             Container(
               child: Column(
@@ -79,6 +82,14 @@ class _Userdetails1State extends State<Userdetails1> {
             Container(
                 child: Row(
               children: [
+                Text(
+                  'You are a',
+                  style: textStyle,
+                ),
+                // SizedBox(
+                //   width: 10,
+                // ),
+                Spacer(),
                 Expanded(
                   child: ReusableCard(
                     onPress: () {
@@ -88,28 +99,24 @@ class _Userdetails1State extends State<Userdetails1> {
                     },
                     decoration: selectedGender == Gender.male
                         ? BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0.2, 1],
-                              colors: [
-                                Color.fromARGB(255, 21, 11, 64),
-                                Color(0xFFC70039)
-                              ],
-                            ),
+                            gradient: gradient,
                             borderRadius: BorderRadius.circular(10.0),
-                          )
+                            border: Border.all(
+                                color: Colors.transparent, width: 2.0))
                         : BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(color: Colors.black, width: 1)),
+                            border: GradientBoxBorder(
+                                gradient: gradient, width: 2.0),
+                          ),
                     cardChild: Text(
                       'Male',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15.0,
                         color: selectedGender == Gender.male
                             ? Colors.white
-                            : Colors.black,
+                            : Color.fromRGBO(36, 20, 104, 0.5),
+                        fontWeight: FontWeight.w700,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -125,28 +132,24 @@ class _Userdetails1State extends State<Userdetails1> {
                     },
                     decoration: selectedGender == Gender.female
                         ? BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0.2, 1],
-                              colors: [
-                                Color.fromARGB(255, 21, 11, 64),
-                                Color(0xFFC70039)
-                              ],
-                            ),
+                            gradient: gradient,
                             borderRadius: BorderRadius.circular(10.0),
-                          )
+                            border: Border.all(
+                                color: Colors.transparent, width: 2.0))
                         : BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(color: Colors.black, width: 1)),
+                            border: GradientBoxBorder(
+                                gradient: gradient, width: 2.0),
+                          ),
                     cardChild: Text(
                       'Female',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15.0,
                         color: selectedGender == Gender.female
                             ? Colors.white
-                            : Colors.black,
+                            : Color.fromRGBO(36, 20, 104, 0.5),
+                        fontWeight: FontWeight.w700,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -158,12 +161,8 @@ class _Userdetails1State extends State<Userdetails1> {
             Row(
               children: [
                 Text(
-                  'AGE',
-                  style: TextStyle(
-                    color: Color.fromRGBO(36, 20, 104, 0.6),
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  'Your Age',
+                  style: textStyle,
                 ),
                 Spacer(),
                 Container(
@@ -182,36 +181,22 @@ class _Userdetails1State extends State<Userdetails1> {
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(
-                        width: 5,
-                      ),
                       Container(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             age.toString(),
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 17.5,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
                             ),
                           ),
                         ),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: [0.2, 1],
-                            colors: [
-                              Color.fromARGB(255, 21, 11, 64),
-                              Color(0xFFC70039)
-                            ],
-                          ),
+                          gradient: gradient,
                           borderRadius: BorderRadius.circular(5.0),
                         ),
-                      ),
-                      SizedBox(
-                        width: 5,
                       ),
                       TextButton(
                         onPressed: () {
@@ -230,6 +215,9 @@ class _Userdetails1State extends State<Userdetails1> {
               ],
             ),
             const SizedBox(height: 20),
+            ReusableTextField(
+                null, false, firstNameController, "You are a 'Developer' etc."),
+            Spacer(),
             MainButton(
               text: 'NEXT',
               onPress: () async {
@@ -252,6 +240,7 @@ class _Userdetails1State extends State<Userdetails1> {
                         lastName: lastNameController.text,
                         age: age,
                         gender: selectedGender == Gender.male ? 'male' : 'female',
+                        occupation: occupationController.text,
                       ),
                     ));
               },
