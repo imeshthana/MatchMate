@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/components/textfield.dart';
 import 'package:matchmate/screens/landing_page.dart';
+import 'package:matchmate/screens/match_mates.dart';
 import '../components/appbar1.dart';
 import '../components/image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +13,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController passwordController = TextEditingController();
-    TextEditingController usernameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,8 +27,8 @@ class Login extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            ReusableTextField('Enter Your Username', false, usernameController,
-                "Enter Your Username"),
+            ReusableTextField('Enter Your Email Address', false, emailController,
+                "Enter Your Email Address"),
             const SizedBox(
               height: 30,
             ),
@@ -41,13 +42,13 @@ class Login extends StatelessWidget {
                 onPress: () {
                   FirebaseAuth.instance
                       .signInWithEmailAndPassword(
-                          email: usernameController.text,
+                          email: emailController.text,
                           password: passwordController.text)
                       .then((signedUser) => {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const LandingPage()))
+                                    builder: (context) => MatchMates()))
                           });
                 })
           ],

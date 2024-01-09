@@ -42,20 +42,23 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                 builder: (context) => const FavouritesScreen()));
           },
         ),
-        IconButton(
-          icon: ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return gradient.createShader(bounds);
-            },
-            child: Icon(
-              Icons.person,
-              size: 30.0,
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: IconButton(
+            icon: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return gradient.createShader(bounds);
+              },
+              child: Icon(
+                Icons.person,
+                size: 30.0,
+              ),
             ),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Profile()));
+            },
           ),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => const Profile()));
-          },
         ),
       ],
     );

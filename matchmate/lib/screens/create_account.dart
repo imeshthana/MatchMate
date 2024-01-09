@@ -59,7 +59,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => Userdetails1(
-                        userName: usernameController.text,
+                        userEmail: emailController.text,
                       ),
                     ));
               },

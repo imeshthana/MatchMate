@@ -22,8 +22,8 @@ late User? loggedInUser;
 final _fireStore = FirebaseFirestore.instance;
 
 class Userdetails1 extends StatefulWidget {
-  Userdetails1({required this.userName});
-  final String userName;
+  Userdetails1({required this.userEmail});
+  final String userEmail;
 
   @override
   _Userdetails1State createState() => _Userdetails1State();
@@ -41,8 +41,8 @@ class _Userdetails1State extends State<Userdetails1> {
 
   @override
   void initState() {
-    super.initState();
     getCurrentUser();
+    super.initState();
   }
 
   void getCurrentUser() async {
@@ -215,8 +215,8 @@ class _Userdetails1State extends State<Userdetails1> {
               ],
             ),
             const SizedBox(height: 20),
-            ReusableTextField(
-                null, false, firstNameController, "You are a 'Developer' etc."),
+            ReusableTextField(null, false, occupationController,
+                "You are a 'Developer' etc."),
             Spacer(),
             MainButton(
               text: 'NEXT',
@@ -235,11 +235,12 @@ class _Userdetails1State extends State<Userdetails1> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => Userdetails2(
-                        userName: widget.userName,
+                        userEmail: widget.userEmail,
                         firstName: firstNameController.text,
                         lastName: lastNameController.text,
                         age: age,
-                        gender: selectedGender == Gender.male ? 'male' : 'female',
+                        gender:
+                            selectedGender == Gender.male ? 'male' : 'female',
                         occupation: occupationController.text,
                       ),
                     ));

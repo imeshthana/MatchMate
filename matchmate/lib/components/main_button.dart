@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/constants.dart';
 
 class MainButton extends StatelessWidget {
   MainButton({required this.text, required this.onPress});
@@ -10,11 +11,7 @@ class MainButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff241468), Color(0xFFC70039)],
-        ),
+        gradient: gradient,
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: TextButton(

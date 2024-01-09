@@ -22,7 +22,7 @@ class Searchbar extends StatelessWidget {
               child: Icon(
                 Icons.search,
                 size: 30.0,
-                color: Color(0xFFC70039), // Adjust the size as needed
+                color: kColor2,
               ),
             ),
             onPressed: () {

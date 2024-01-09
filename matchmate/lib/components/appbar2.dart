@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/constants.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   const Appbar({
@@ -12,12 +13,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: ShaderMask(
         shaderCallback: (Rect bounds) {
-          return const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xff241468), Color(0xFFC70039)],
-            tileMode: TileMode.clamp,
-          ).createShader(bounds);
+          return gradient.createShader(bounds);
         },
         child: const Text(
           'MatchMate',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/constants.dart';
 
 class MessageButton extends StatelessWidget {
   MessageButton({super.key, this.cardChild, this.onPress});
@@ -18,11 +19,7 @@ class MessageButton extends StatelessWidget {
       // Use a Container to apply gradient background
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xff241468), Color(0xFFC70039)],
-          ),
+          gradient: gradient,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: cardChild, // Icon goes here

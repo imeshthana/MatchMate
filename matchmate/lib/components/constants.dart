@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 const kColor1 = Color(0xff241468);
-const kColour2 = Color(0xFFC70039);
+const kColor2 = Color(0xFFC70039);
 
 LinearGradient gradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
-  colors: [kColor1, kColour2],
+  colors: [kColor1, kColor2],
   tileMode: TileMode.clamp,
 );
 
