@@ -1,24 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:matchmate/components/appbar1.dart';
 import 'package:matchmate/screens/chat_screen.dart';
 import '../components/constants.dart';
-import '../components/message_button.dart';
+import '../components/edit_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:matchmate/components/preference.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+late User? loggedInUser;
+
+class Profile extends StatefulWidget {
+  static String id = 'profile';
+  Profile({required this.userEmail});
+
+  final String userEmail;
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final _fireStore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  String? firstName;
+  String? lastName;
+  String? state;
+  String? country;
+  int? age;
+  String? bio;
+  String? occupation;
+  List<String> preferences = [];
+  String? profileImageUrl;
+
+  @override
+  void initState() {
+    getCurrentUser();
+    getUserData();
+    super.initState();
+  }
+
+  void getCurrentUser() async {
+    final user = await _auth.currentUser;
+    if (user != null) {
+      loggedInUser = user;
+    }
+  }
+
+  Future<void> getUserData() async {
+    loggedInUser = _auth.currentUser!;
+    DocumentSnapshot userSnapshot =
+        await _fireStore.collection('profiles').doc(widget.userEmail).get();
+
+    setState(() {
+      firstName = userSnapshot['firstname'].toString();
+      lastName = userSnapshot['lastname'].toString();
+      age = userSnapshot['age'];
+      bio = userSnapshot['bio'];
+      occupation = userSnapshot['occupation'];
+      state = userSnapshot['state'];
+      country = userSnapshot['country'];
+      preferences = List<String>.from(userSnapshot['preferences'] ?? []);
+      profileImageUrl = userSnapshot['image'];
+    });
+  }
+
+  void addToPending(String userEmail) async {
+    DocumentReference userProfile =
+        _fireStore.collection('profiles').doc(loggedInUser?.email);
+
+    DocumentReference favouritesProfile =
+        _fireStore.collection('profiles').doc(userEmail);
+
+    await userProfile.update({
+      'pendings': FieldValue.arrayUnion([userEmail]),
+    });
+
+    await favouritesProfile.update({
+      'requests': FieldValue.arrayUnion([loggedInUser?.email]),
+    });
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: Center(
+          child: Text('Request sent to $firstName',
+              textAlign: TextAlign.center, style: textStyle),
+        ),
+      ),
+    );
+  }
+
+  void removeFromPending(String userEmail) async {
+    DocumentReference userProfile =
+        _fireStore.collection('profiles').doc(loggedInUser?.email);
+
+    DocumentReference favouritesProfile =
+        _fireStore.collection('profiles').doc(userEmail);
+
+    await userProfile.update({
+      'pendings': FieldValue.arrayRemove([userEmail]),
+    });
+
+    await favouritesProfile.update({
+      'requests': FieldValue.arrayRemove([loggedInUser?.email]),
+    });
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: Center(
+          child: Text('Request to $firstName is removed',
+              textAlign: TextAlign.center, style: textStyle),
+        ),
+      ),
+    );
+  }
+
+  bool isFavouritePressed = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: MessageButton(
-        cardChild: Icon(Icons.message),
-        onPress: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const ChatScreen()));
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.transparent,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(12.5),
+          decoration: isFavouritePressed
+              ? BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: GradientBoxBorder(gradient: gradient, width: 2.0))
+              : BoxDecoration(
+                  gradient: gradient,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+          child: isFavouritePressed
+              ? ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return gradient.createShader(bounds);
+                  },
+                  child: Icon(
+                    Icons.favorite,
+                    size: 25.0,
+                  ),
+                )
+              : Icon(
+                  Icons.favorite,
+                  color: Colors.white,
+                  size: 25.0,
+                ),
+        ),
+        onPressed: () async {
+          setState(() {
+            isFavouritePressed = !isFavouritePressed;
+          });
+          if (isFavouritePressed) {
+            addToPending(widget.userEmail);
+          } else {
+            removeFromPending(widget.userEmail);
+          }
         },
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: Appbar(),
       body: SingleChildScrollView(
         child: Column(
@@ -33,7 +183,7 @@ class Profile extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/8.jpg"),
+                        image: NetworkImage(profileImageUrl ?? ''),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -51,15 +201,6 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 20.0,
-                    right: 20.0,
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                      size: 35.0,
-                    ),
-                  ),
                   Container(
                     alignment: Alignment.bottomCenter,
                     child: ShaderMask(
@@ -67,7 +208,7 @@ class Profile extends StatelessWidget {
                         return gradient.createShader(bounds);
                       },
                       child: Text(
-                        'Arjun Aryan',
+                        '$firstName $lastName',
                         style: TextStyle(
                           fontSize: 35.0,
                           fontWeight: FontWeight.bold,
@@ -102,7 +243,7 @@ class Profile extends StatelessWidget {
                             ),
                             Container(
                               child: Text(
-                                "Developer",
+                                '$occupation',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 17.5,
@@ -119,7 +260,7 @@ class Profile extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              "25",
+                              "$age",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 17.5,
@@ -146,7 +287,7 @@ class Profile extends StatelessWidget {
                       ),
                       Container(
                         child: Text(
-                          "Maharastra, India",
+                          "$state, $country",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 17.5,
@@ -169,8 +310,7 @@ class Profile extends StatelessWidget {
                       Expanded(
                         child: Container(
                           child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-                            // textAlign: TextAlign.justify,
+                            '$bio',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -198,100 +338,10 @@ class Profile extends StatelessWidget {
                     child: Wrap(
                       spacing: 15.0,
                       runSpacing: 10.0,
-                      children: [
-                        Container(
-                          child: Text(
-                            'Sports',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(199, 0, 57, 0.8),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Education',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Travelling',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Dancing',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Western Music',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Meet People',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Container(
-                          child: Text(
-                            'Cooking',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 17.5),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(199, 0, 57, 0.8),
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.all(5),
-                        ),
-                      ],
+                      children: preferences
+                          .map((preference) =>
+                              Preference(preference: preference))
+                          .toList(),
                     ),
                   )
                 ],

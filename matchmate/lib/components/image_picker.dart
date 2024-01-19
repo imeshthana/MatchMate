@@ -6,8 +6,10 @@ import 'package:matchmate/components/constants.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
 class ImagePickerWidget extends StatefulWidget {
-  const ImagePickerWidget({Key? key}) : super(key: key);
+  final Function(File) onImageSelected; 
 
+  const ImagePickerWidget({Key? key, required this.onImageSelected})
+      : super(key: key);
   @override
   State<ImagePickerWidget> createState() => _ImagePickerWidgetState();
 }
@@ -15,6 +17,16 @@ class ImagePickerWidget extends StatefulWidget {
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   Uint8List? image;
   File? selectedImage;
+  String? imageUrl;
+
+  void _setImage(File imageFile) {
+    setState(() {
+      selectedImage = imageFile;
+      image = imageFile.readAsBytesSync();
+    });
+
+    widget.onImageSelected(imageFile);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +94,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     Navigator.of(context).pop();
   }
 
-  void _setImage(File imageFile) {
-    setState(() {
-      selectedImage = imageFile;
-      image = imageFile.readAsBytesSync();
-    });
-  }
+  // void _setImage(File imageFile) {
+  //   setState(() {
+  //     selectedImage = imageFile;
+  //     image = imageFile.readAsBytesSync();
+  //   });
+  // }
 
   void bottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -158,7 +170,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       ),
                     ],
                   ),
-                ),
+                )
               ),
             ],
           ),

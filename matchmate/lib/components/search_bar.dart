@@ -3,9 +3,10 @@ import 'package:matchmate/components/textfield.dart';
 import 'constants.dart';
 
 class Searchbar extends StatelessWidget {
-  const Searchbar({
-    super.key,
-  });
+  Searchbar({required this.searchController, required this.onSearchChanged});
+
+  final TextEditingController searchController;
+  final Function(String) onSearchChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +27,14 @@ class Searchbar extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              // Handle the onPressed event for the search icon
+              
             },
           ),
           Expanded(
             child: Container(
                 height: 50,
                 child: ReusableTextField(
-                    null, false, null, 'Search Your Mate...')),
+                    null, false, searchController, 'Search Your Mate...', onSearchChanged)),
           ),
         ],
       ),

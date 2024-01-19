@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/screens/favourites.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
-import 'package:matchmate/screens/profile.dart';
+import 'package:matchmate/screens/user_profile.dart';
 import 'constants.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
@@ -56,7 +57,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Profile()));
+                  MaterialPageRoute(builder: (context) => const UserProfile()));
             },
           ),
         ),

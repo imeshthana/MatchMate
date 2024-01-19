@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:matchmate/components/image.dart';
 import 'package:matchmate/components/main_button.dart';
-import 'package:matchmate/components/message_button.dart';
+import 'package:matchmate/components/edit_button.dart';
 import 'package:matchmate/components/textfield.dart';
 import '../components/reusable_card.dart';
 import '../components/appbar2.dart';
@@ -22,6 +22,7 @@ late User? loggedInUser;
 final _fireStore = FirebaseFirestore.instance;
 
 class Userdetails1 extends StatefulWidget {
+  static String id = 'userdetails1';
   Userdetails1({required this.userEmail});
   final String userEmail;
 
@@ -57,30 +58,30 @@ class _Userdetails1State extends State<Userdetails1> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const Appbar(),
-      body: Padding(
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.center,
         padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const MainImage(),
-            const SizedBox(
-              height: 30,
+
+        children: [
+          const MainImage(),
+          const SizedBox(
+            height: 30,
+          ),
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ReusableTextField(
+                    null, false, firstNameController, "First Name", null),
+                const SizedBox(height: 20),
+                ReusableTextField(
+                    null, false, lastNameController, "Last Name", null),
+              ],
             ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ReusableTextField(
-                      null, false, firstNameController, "First Name"),
-                  const SizedBox(height: 20),
-                  ReusableTextField(
-                      null, false, lastNameController, "Last Name"),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-                child: Row(
+          ),
+          const SizedBox(height: 20),
+          Container(
+            child: Row(
               children: [
                 Text(
                   'You are a',
@@ -156,98 +157,87 @@ class _Userdetails1State extends State<Userdetails1> {
                   ),
                 ),
               ],
-            )),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Text(
-                  'Your Age',
-                  style: textStyle,
-                ),
-                Spacer(),
-                Container(
-                  child: Container(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            age--;
-                          });
-                        },
-                        child: Icon(
-                          FontAwesomeIcons.minus,
-                          color: Colors.black,
-                        ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Text(
+                'Your Age',
+                style: textStyle,
+              ),
+              Spacer(),
+              Container(
+                child: Container(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          age--;
+                        });
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.minus,
+                        color: Colors.black,
                       ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            age.toString(),
-                            style: TextStyle(
-                              fontSize: 17.5,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                            ),
+                    ),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          age.toString(),
+                          style: TextStyle(
+                            fontSize: 17.5,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
                           ),
                         ),
-                        decoration: BoxDecoration(
-                          gradient: gradient,
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            age++;
-                          });
-                        },
-                        child: Icon(
-                          FontAwesomeIcons.plus,
-                          color: Colors.black,
-                        ),
+                      decoration: BoxDecoration(
+                        gradient: gradient,
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
-                    ],
-                  )),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ReusableTextField(null, false, occupationController,
-                "You are a 'Developer' etc."),
-            Spacer(),
-            MainButton(
-              text: 'NEXT',
-              onPress: () async {
-                // await _fireStore
-                //     .collection('profiles')
-                //     .doc(widget.userName)
-                //     .set({
-                //   'firstname': firstNameController.text,
-                //   'lastname': lastNameController.text,
-                //   'age': age,
-                //   'gender': selectedGender == Gender.male ? 'male' : 'female',
-                // });
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Userdetails2(
-                        userEmail: widget.userEmail,
-                        firstName: firstNameController.text,
-                        lastName: lastNameController.text,
-                        age: age,
-                        gender:
-                            selectedGender == Gender.male ? 'male' : 'female',
-                        occupation: occupationController.text,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          age++;
+                        });
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.plus,
+                        color: Colors.black,
                       ),
-                    ));
-              },
-            )
-          ],
-        ),
+                    ),
+                  ],
+                )),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ReusableTextField(null, false, occupationController,
+              "You are a 'Developer' etc.", null),
+          const SizedBox(height: 20),
+          MainButton(
+            text: 'NEXT',
+            onPress: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Userdetails2(
+                      userEmail: widget.userEmail,
+                      firstName: firstNameController.text,
+                      lastName: lastNameController.text,
+                      age: age,
+                      gender: selectedGender == Gender.male ? 'male' : 'female',
+                      occupation: occupationController.text,
+                    ),
+                  ));
+            },
+          )
+        ],
       ),
     );
   }

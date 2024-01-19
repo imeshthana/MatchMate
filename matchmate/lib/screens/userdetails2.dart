@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +13,13 @@ import 'package:matchmate/screens/country_state_city_repo.dart';
 import 'package:matchmate/components/image_picker.dart';
 import 'package:matchmate/components/reusable_card.dart';
 import 'package:matchmate/screens/match_mates.dart';
+import 'package:image_picker/image_picker.dart';
 
 late User? loggedInUser;
 final _fireStore = FirebaseFirestore.instance;
 
 class Userdetails2 extends StatefulWidget {
+  static String id = 'userdetails2';
   Userdetails2(
       {required this.userEmail,
       required this.lastName,
@@ -38,18 +42,17 @@ class Userdetails2 extends StatefulWidget {
 class _Userdetails2State extends State<Userdetails2> {
   final CountryStateCityRepo _countryStateCityRepo = CountryStateCityRepo();
   final _auth = FirebaseAuth.instance;
+  File? _image;
+  String? imageUrl;
 
   TextEditingController preferenceController = TextEditingController();
   TextEditingController bioController = TextEditingController();
 
   List<String> preferences = [];
-
-  // PickedFile? _imageFile;
-  // final ImagePicker _picker = ImagePicker();
-
   List<String> countries = [];
   List<String> states = [];
   List<String> cities = [];
+
   cs_model.CountryStateModel countryStateModel =
       cs_model.CountryStateModel(error: false, msg: '', data: []);
 
@@ -331,11 +334,28 @@ class _Userdetails2State extends State<Userdetails2> {
               SizedBox(
                 height: 10,
               ),
-              ImagePickerWidget(),
+              ImagePickerWidget(
+                onImageSelected: (File image) {
+                  _image = image;
+                },
+              ),
               Spacer(),
               MainButton(
                 text: 'Create Your Account',
                 onPress: () async {
+                  var imageName =
+                      DateTime.now().millisecondsSinceEpoch.toString();
+                  var storageRef = FirebaseStorage.instance
+                      .ref()
+                      .child('$imageName.jpg');
+                  var uploadTask = storageRef.putFile(_image!);
+                  var downloadUrl =
+                      await (await uploadTask).ref.getDownloadURL();
+
+                  setState(() {
+                    imageUrl = downloadUrl.toString();
+                  });
+
                   await _fireStore
                       .collection('profiles')
                       .doc(loggedInUser?.email)
@@ -344,18 +364,33 @@ class _Userdetails2State extends State<Userdetails2> {
                     'firstname': widget.firstName,
                     'lastname': widget.lastName,
                     'age': widget.age,
-                    'gender':widget.gender,
+                    'gender': widget.gender,
                     'occupation': widget.occupation,
                     'country': selectedCountry,
                     'state': selectedState,
                     'bio': bioController.text,
                     'preferences': preferences,
+                    'image': imageUrl,
                   });
 
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const MatchMates()));
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      title: Center(
+                        child: Text(
+                            'Successfully registered as ${loggedInUser?.email}',
+                            textAlign: TextAlign.center,
+                            style: textStyle),
+                      ),
+                    ),
+                  );
                 },
               ),
               SizedBox(

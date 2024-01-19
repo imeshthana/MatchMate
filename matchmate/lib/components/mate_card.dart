@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/constants.dart';
 
-class MateCard extends StatelessWidget {
-  MateCard(
-      {required this.name,
-      required this.image,
-      required this.onFavouritePressed});
+class MateCard extends StatefulWidget {
+  MateCard({
+    required this.name,
+    required this.image,
+  });
   String name;
   String image;
-  VoidCallback? onFavouritePressed;
+
+  @override
+  State<MateCard> createState() => _MateCardState();
+}
+
+class _MateCardState extends State<MateCard> {
+  bool isFavouritePressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +28,14 @@ class MateCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.asset(
-                image,
+              Image.network(
+                widget.image,
                 fit: BoxFit.fill,
-                height: 150,
+                height: 175,
                 width: 150,
               ),
               Container(
-                height: 150,
+                height: 175,
                 width: 150,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -42,18 +48,6 @@ class MateCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                top: 8.0,
-                right: 8.0,
-                child: IconButton(
-                  onPressed: onFavouritePressed,
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                    size: 25.0,
-                  ),
-                ),
-              ),
               Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.only(bottom: 7.5),
@@ -62,11 +56,11 @@ class MateCard extends StatelessWidget {
                     return gradient.createShader(bounds);
                   },
                   child: Text(
-                    name,
+                    widget.name,
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // Text color
+                      color: Colors.white,
                     ),
                   ),
                 ),

@@ -3,8 +3,9 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:matchmate/components/constants.dart';
 
 TextField ReusableTextField(String? text, bool isPasswordType,
-    TextEditingController? controller, String hintText) {
+    TextEditingController? controller, String hintText, Function(String)? onchanged) {
   return TextField(
+    onChanged: onchanged,
     controller: controller,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
@@ -12,7 +13,6 @@ TextField ReusableTextField(String? text, bool isPasswordType,
     decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        // labelText: text,
         hintText: hintText,
         hintStyle: hintTextStyle,
         border: GradientOutlineInputBorder(
