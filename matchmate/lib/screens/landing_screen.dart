@@ -5,8 +5,6 @@ import '../components/main_button.dart';
 import 'create_account.dart';
 
 class LandingPage extends StatelessWidget {
-  static String id = 'landing';
-
   const LandingPage({super.key});
 
   @override
@@ -36,13 +34,9 @@ class LandingPage extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          Hero(
-            tag: 'logo',
-            child: Image.asset(
-              "assets/logo.jpg",
-              height: MediaQuery.of(context).size.height * 0.45,
-              width: MediaQuery.of(context).size.width * 0.95,
-            ),
+          Image.asset(
+            "assets/logo.jpg",
+            height: 300,
           ),
 
           const SizedBox(height: 60),
@@ -55,9 +49,7 @@ class LandingPage extends StatelessWidget {
             },
           ),
 
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
+          const SizedBox(height: 30),
 
           Container(
             alignment: Alignment.topCenter,

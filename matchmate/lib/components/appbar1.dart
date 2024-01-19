@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matchmate/screens/favourites.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
-import 'package:matchmate/screens/user_profile.dart';
+import 'package:matchmate/screens/profile.dart';
 import 'constants.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
@@ -43,23 +43,20 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                 builder: (context) => const FavouritesScreen()));
           },
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: IconButton(
-            icon: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return gradient.createShader(bounds);
-              },
-              child: Icon(
-                Icons.person,
-                size: 30.0,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const UserProfile()));
+        IconButton(
+          icon: ShaderMask(
+            shaderCallback: (Rect bounds) {
+              return gradient.createShader(bounds);
             },
+            child: Icon(
+              Icons.person,
+              size: 30.0,
+            ),
           ),
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const Profile()));
+          },
         ),
       ],
     );

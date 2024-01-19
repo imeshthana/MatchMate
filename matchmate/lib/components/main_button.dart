@@ -10,6 +10,7 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width:   MediaQuery.of(context).size.width * 0.55,
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(20.0),

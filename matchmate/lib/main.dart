@@ -10,9 +10,8 @@ void main() async {
           apiKey: 'AIzaSyA3hSDIWTZb_HwSurQaEz6x816A1r2ErpQ',
           appId: '1:801264951582:android:54edff208c4be40c51a90f',
           messagingSenderId: '801264951582',
-          projectId: 'matchmate-cpbio8292',
-          storageBucket: 'matchmate-cpbio8292.appspot.com'));
-  runApp(const MatchMate());
+          projectId: 'matchmate-cpbio8292'));
+  runApp(const MyApp());
 }
 
 class MatchMate extends StatelessWidget {
