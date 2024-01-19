@@ -19,129 +19,64 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Appbar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Searchbar(),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(left: 20, top: 20),
-              child: Text(
-                "Your Favourites",
-                style: textStyle,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin:
-                        EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 0),
-                    child: ListTile(
-                      leading: Card(
-                        margin: EdgeInsets.only(left: 0),
-                        elevation: 5,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: Image.asset(
-                            'assets/1.jpg',
-                            fit: BoxFit.fill,
-                            height: 60,
-                            width: 45,
-                          ),
-                        ),
-                      ),
-                      title: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              gradient: gradient,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        left: 10, top: 20, bottom: 20),
-                                    child: Text(
-                                      favorites[index],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                        size: 30,
-                                      ),
-                                      onPressed: () {
-                                        // setState(() {
-                                        //   favorites.removeAt(index);
-                                        // });
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.message,
-                                        color: Colors.white,
-                                        size: 27,
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 3,
-                            right: 3,
-                            child: Container(
-                              // Add your notification icon here
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.transparent, // Background color
-                                border: Border.all(
-                                  color: Colors.transparent, // Border color
-                                  width: 1.0, // Border width
-                                ),
-                              ),
-                              padding: EdgeInsets.all(1),
-                              child: Icon(
-                                Icons.notifications,
-                                color: Colors.white,
-                                size: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+      body: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 10,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              bottom: TabBar(
+                indicatorColor: kColor4,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      'Favourites',
+                      style: tabBartextStyle,
                     ),
-                  );
-                },
+                  ),
+                  Tab(
+                    child: Text(
+                      'Requests',
+                      style: tabBartextStyle,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Pendings',
+                      style: tabBartextStyle,
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
+            body: Stack(children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.25),
+                      BlendMode.dstATop,
+                    ),
+                    child: Image.asset('assets/logo.jpg'),
+                  ),
+                ),
+              ),
+              TabBarView(children: [
+                Container(
+                  child: Favourites(),
+                ),
+                Container(
+                  child: Requests(),
+                ),
+                Container(
+                  child: Pending(),
+                )
+              ]),
+            ]),
+          )),
     );
   }
 }

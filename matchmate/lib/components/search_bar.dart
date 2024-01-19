@@ -34,7 +34,7 @@ class Searchbar extends StatelessWidget {
             child: Container(
                 height: 50,
                 child: ReusableTextField(
-                    null, false, null, 'Search Your Mate...')),
+                    null, false, searchController, 'Search Your Mate...', onSearchChanged)),
           ),
         ],
       ),
