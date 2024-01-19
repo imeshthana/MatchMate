@@ -40,8 +40,8 @@ class MessageBubble extends StatelessWidget {
                       'https://firebasestorage.googleapis.com/v0/b/matchmate-cpbio8292.appspot.com')
                   ? Image.network(
                       text,
-                      width: 200,
-                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.width * 0.5,
                       fit: BoxFit.cover,
                     )
                   : Text(
