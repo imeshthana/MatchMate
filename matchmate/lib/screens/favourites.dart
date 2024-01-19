@@ -230,7 +230,7 @@ class _FavouritesState extends State<Favourites> {
                                                                     title:
                                                                         Center(
                                                                       child: Text(
-                                                                          'You deleted ${snapshot.data!} from favourites',
+                                                                          'You deleted $name from favourites',
                                                                           textAlign: TextAlign
                                                                               .center,
                                                                           style:
@@ -258,7 +258,7 @@ class _FavouritesState extends State<Favourites> {
                                                             ),
                                                           ),
                                                           content: Text(
-                                                              'Do you really want to delete ${snapshot.data!} from your favourites?',
+                                                              'Do you really want to delete $name from your favourites?',
                                                               style: textStyle),
                                                         ),
                                                       );

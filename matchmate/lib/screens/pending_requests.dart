@@ -220,7 +220,7 @@ class _PendingState extends State<Pending> {
                                                                     title:
                                                                         Center(
                                                                       child: Text(
-                                                                          'You deleted the request to ${snapshot.data!}',
+                                                                          'You deleted the request to $name',
                                                                           textAlign: TextAlign
                                                                               .center,
                                                                           style:
@@ -248,7 +248,7 @@ class _PendingState extends State<Pending> {
                                                             ),
                                                           ),
                                                           content: Text(
-                                                              'Do you really want to delete the request to ${snapshot.data!}?',
+                                                              'Do you really want to delete the request to $name?',
                                                               style: textStyle),
                                                         ),
                                                       );

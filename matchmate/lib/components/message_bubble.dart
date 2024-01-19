@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({required this.sender, required this.text, required this.isMe});
+  MessageBubble({
+    required this.sender,
+    required this.text,
+    required this.isMe,
+    // required this.imageUrl
+  });
 
   late final String sender;
   late final String text;
   late final bool isMe;
+  // final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +22,6 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          // Text(sender, style: TextStyle(color: Colors.black54, fontSize: 14)),
           Material(
             borderRadius: isMe
                 ? BorderRadius.only(
@@ -31,13 +36,22 @@ class MessageBubble extends StatelessWidget {
             color: isMe ? kColor4 : kColor5,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(
-                text,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500),
-              ),
+              child: text.contains(
+                      'https://firebasestorage.googleapis.com/v0/b/matchmate-cpbio8292.appspot.com')
+                  ? Image.network(
+                      text,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ),
           ),
         ],

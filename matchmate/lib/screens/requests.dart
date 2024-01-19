@@ -212,7 +212,7 @@ class _RequestsState extends State<Requests> {
                                                                             15)),
                                                             title: Center(
                                                               child: Text(
-                                                                  '${snapshot.data!} is added to your favourites',
+                                                                  '$name is added to your favourites',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -305,7 +305,7 @@ class _RequestsState extends State<Requests> {
                                                                     title:
                                                                         Center(
                                                                       child: Text(
-                                                                          'You deleted the request from ${snapshot.data!}',
+                                                                          'You deleted the request from $name',
                                                                           textAlign: TextAlign
                                                                               .center,
                                                                           style:
@@ -333,7 +333,7 @@ class _RequestsState extends State<Requests> {
                                                             ),
                                                           ),
                                                           content: Text(
-                                                              'Do you really want to delete the request from ${snapshot.data!}?',
+                                                              'Do you really want to delete the request from $name?',
                                                               style: textStyle),
                                                         ),
                                                       );

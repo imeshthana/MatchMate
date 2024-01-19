@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/input_borders/gradient_outline_input_border.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matchmate/components/message_bubble.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
 import '../components/constants.dart';
@@ -25,6 +29,11 @@ class _ChatScreenState extends State<ChatScreen> {
   String favouritesFirstName = '';
   String? favouritesImage;
   String? favoriteUserEmail;
+
+  File? _image;
+  String? imageUrl;
+  Uint8List? image;
+  File? selectedImage;
 
   late String messageText;
 
@@ -70,6 +79,185 @@ class _ChatScreenState extends State<ChatScreen> {
     return createUniqueID(emails[0], emails[1]);
   }
 
+  Future<void> _pickImageFromGallery() async {
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _setImage(File(pickedFile.path));
+    }
+
+    // Navigator.of(context).pop();
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      _setImage(File(pickedFile.path));
+    }
+
+    // Navigator.of(context).pop();
+  }
+
+  void _setImage(File imageFile) {
+    setState(() {
+      selectedImage = imageFile;
+      image = imageFile.readAsBytesSync();
+    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          content: Image.file(selectedImage!),
+          actions: [
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  margin: EdgeInsets.only(right: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: IconButton(
+                      icon: Icon(Icons.send),
+                      color: Colors.white,
+                      onPressed: () async {
+                        var imageName =
+                            DateTime.now().millisecondsSinceEpoch.toString();
+                        var storageRef = FirebaseStorage.instance
+                            .ref()
+                            .child('$imageName.jpg');
+                        var uploadTask = storageRef.putFile(selectedImage!);
+                        var downloadUrl =
+                            await (await uploadTask).ref.getDownloadURL();
+
+                        setState(() {
+                          imageUrl = downloadUrl.toString();
+                        });
+
+                        _fireStore
+                            .collection('messages')
+                            .doc(createChatDocumentID(
+                                loggedInUser!.email!, widget.userEmail))
+                            .collection('messages')
+                            .add({
+                          'text': imageUrl,
+                          'sender': loggedInUser?.email,
+                          'receiver': widget.userEmail,
+                          'timestamp': FieldValue.serverTimestamp(),
+                        });
+                        Navigator.of(context).pop();
+                      }),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void bottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (builder) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25),
+              topLeft: Radius.circular(25),
+            ),
+            color: Color.fromRGBO(199, 0, 57, 0.8),
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 6,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    _pickImageFromGallery();
+                    Navigator.pop(context);
+                  },
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Icon(
+                          Icons.image,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "Gallery",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: InkWell(
+                onTap: () {
+                  _pickImageFromCamera();
+                  Navigator.pop(context);
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Icon(
+                        Icons.camera_alt,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        "Camera",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +276,7 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               CircleAvatar(
                 radius: 20.0,
-                backgroundImage: NetworkImage('$favouritesImage' ?? ''),
+                backgroundImage: NetworkImage('$favouritesImage'),
               ),
               SizedBox(
                 width: 10,
@@ -162,6 +350,27 @@ class _ChatScreenState extends State<ChatScreen> {
                         isMe: currentUser == messageSender,
                       );
                       messageBubbles.add(messageBubble);
+
+                      // if (messageImage != null) {
+                      //   // Check if 'image' is not an empty string
+                      //   if (messageImage.isNotEmpty) {
+                      //     final messageBubble = MessageBubble(
+                      //       sender: messageSender,
+                      //       text: '',
+                      //       isMe: currentUser == messageSender,
+                      //       imageUrl: messageImage,
+                      //     );
+                      //     messageBubbles.add(messageBubble);
+                      //   }
+                      // } else {
+                      //   final messageBubble = MessageBubble(
+                      //     sender: messageSender,
+                      //     imageUrl: '',
+                      //     text: messageText,
+                      //     isMe: currentUser == messageSender,
+                      //   );
+                      //   messageBubbles.add(messageBubble);
+                      // }
                     }
 
                     return Expanded(
@@ -220,6 +429,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: IconButton(
+                    icon: Icon(Icons.camera),
+                    color: Colors.white,
+                    onPressed: () {
+                      bottomSheet(context);
+                      messageTextController.clear();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: IconButton(
                     icon: Icon(Icons.send),
                     color: Colors.white,
                     onPressed: () {
@@ -233,6 +459,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'sender': loggedInUser?.email,
                         'receiver': widget.userEmail,
                         'timestamp': FieldValue.serverTimestamp(),
+                        'image': '',
                       });
 
                       messageTextController.clear();
