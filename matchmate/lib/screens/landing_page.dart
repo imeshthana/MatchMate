@@ -36,7 +36,8 @@ class LandingPage extends StatelessWidget {
 
           Image.asset(
             "assets/logo.jpg",
-            height: 300,
+            height: MediaQuery.of(context).size.height * 0.45,
+            width: MediaQuery.of(context).size.width * 0.95,
           ),
 
           const SizedBox(height: 60),
@@ -49,7 +50,8 @@ class LandingPage extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 30),
+           SizedBox(height: MediaQuery.of(context).size.height * 0.02
+            ),
 
           Container(
             alignment: Alignment.topCenter,

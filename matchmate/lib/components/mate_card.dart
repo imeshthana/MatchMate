@@ -1,32 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/constants.dart';
 
-class MateCard extends StatelessWidget {
-  MateCard({required this.name, required this.image});
+class MateCard extends StatefulWidget {
+  MateCard({
+    required this.name,
+    required this.image,
+  });
   String name;
   String image;
+
+  @override
+  State<MateCard> createState() => _MateCardState();
+}
+
+class _MateCardState extends State<MateCard> {
+  bool isFavouritePressed = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 150,
-      width: 125,
+      width: 150,
       child: Material(
-        elevation: 5, // Adjust the shadow elevation as needed
-        borderRadius:
-            BorderRadius.circular(12), // Adjust the corner radius as needed
+        elevation: 5,
+        borderRadius: BorderRadius.circular(12),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              Image.asset(
-                image,
+              Image.network(
+                widget.image,
                 fit: BoxFit.fill,
-                height: 150,
-                width: 125,
+                height: 175,
+                width: 150,
               ),
               Container(
-                height: 150,
-                width: 125,
+                height: 175,
+                width: 150,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
@@ -38,32 +48,19 @@ class MateCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                top: 8.0,
-                right: 8.0,
-                child: Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                  size: 25.0,
-                ),
-              ),
               Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.only(bottom: 7.5),
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      colors: [Color(0xff241468), Color(0xFFC70039)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ).createShader(bounds);
+                    return gradient.createShader(bounds);
                   },
                   child: Text(
-                    name,
+                    widget.name,
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // Text color
+                      color: Colors.white,
                     ),
                   ),
                 ),

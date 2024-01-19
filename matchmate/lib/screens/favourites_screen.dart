@@ -27,7 +27,6 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
             SizedBox(
               height: 20,
             ),
-            Searchbar(),
             Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.only(left: 20, top: 20),
