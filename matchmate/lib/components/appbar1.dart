@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/screens/favourites.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
-import 'package:matchmate/screens/landing_page.dart';
 import 'package:matchmate/screens/profile.dart';
 import 'constants.dart';
 
@@ -55,7 +55,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           ),
           onPressed: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => const LandingPage()));
+                .push(MaterialPageRoute(builder: (context) => const Profile()));
           },
         ),
       ],

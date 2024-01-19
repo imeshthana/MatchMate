@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/appbar1.dart';
-import '../components/constants.dart';
-import '../components/search_bar.dart';
+import 'package:matchmate/components/constants.dart';
+import 'package:matchmate/components/search_bar.dart';
+import 'package:matchmate/screens/favourites.dart';
+import 'package:matchmate/screens/requests.dart';
+import 'package:matchmate/screens/pending_requests.dart';
 
 class FavouritesScreen extends StatefulWidget {
+  static String id = 'favourites_screen';
   const FavouritesScreen({super.key});
 
   @override
@@ -11,12 +15,6 @@ class FavouritesScreen extends StatefulWidget {
 }
 
 class _FavouritesScreenState extends State<FavouritesScreen> {
-  List<String> favorites = [
-    'Anaya Pandey',
-    'Fedrona Lucy',
-    'Steffany Kirshy',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +25,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
             SizedBox(
               height: 20,
             ),
+            Searchbar(),
             Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.only(left: 20, top: 20),

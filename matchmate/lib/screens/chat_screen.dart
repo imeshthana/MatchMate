@@ -1,15 +1,75 @@
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gradient_borders/input_borders/gradient_outline_input_border.dart';
+import 'package:matchmate/components/message_bubble.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
 import '../components/constants.dart';
+import 'package:crypto/crypto.dart';
+
+late User? loggedInUser;
+final _fireStore = FirebaseFirestore.instance;
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  ChatScreen({required this.userEmail});
+  final String userEmail;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _auth = FirebaseAuth.instance;
+  String favouritesLastName = '';
+  String favouritesFirstName = '';
+  String? favouritesImage;
+  String? favoriteUserEmail;
+
+  late String messageText;
+
+  final messageTextController = TextEditingController();
+
+  @override
+  void initState() {
+    getCurrentUser();
+    fetchFavoritesName(widget.userEmail);
+    super.initState();
+  }
+
+  void getCurrentUser() async {
+    final user = await _auth.currentUser;
+    if (user != null) {
+      loggedInUser = user;
+    }
+  }
+
+  void fetchFavoritesName(String useremail) async {
+    DocumentSnapshot userSnapshot =
+        await _fireStore.collection('profiles').doc(useremail).get();
+
+    setState(() {
+      favouritesFirstName = userSnapshot['firstname'];
+      favouritesLastName = userSnapshot['lastname'];
+      favouritesImage = userSnapshot['image'];
+    });
+  }
+
+  String createUniqueID(String str1, String str2) {
+    String concatenated = '$str1|$str2';
+
+    var bytes = utf8.encode(concatenated);
+    var digest = sha256.convert(bytes);
+
+    return digest.toString();
+  }
+
+  String createChatDocumentID(String userEmail1, String userEmail2) {
+    List<String> emails = [userEmail1, userEmail2];
+    emails.sort();
+    return createUniqueID(emails[0], emails[1]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,24 +78,23 @@ class _ChatScreenState extends State<ChatScreen> {
         elevation: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
-            gradient: gradient
-          ),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+              gradient: gradient),
         ),
         title: Container(
           child: Row(
             children: [
               CircleAvatar(
                 radius: 20.0,
-                backgroundImage: AssetImage('assets/1.jpg'),
+                backgroundImage: NetworkImage('$favouritesImage' ?? ''),
               ),
               SizedBox(
                 width: 10,
               ),
               Text(
-                'Ananya Pandey',
+                '$favouritesFirstName $favouritesLastName',
                 style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -50,8 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
             icon: Icon(Icons.logout),
             color: Colors.white,
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const FavouritesScreen()));
+              Navigator.pop(context);
             },
           ),
         ],
@@ -60,9 +118,62 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Container(
-                // Your chat messages or other widgets can go here
+            child: Stack(children: [
+              Center(
+                child: Container(
+                  color: Colors.transparent,
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.5),
+                      BlendMode.dstATop,
+                    ),
+                    child: Image.asset('assets/logo.jpg'),
+                  ),
                 ),
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _fireStore
+                      .collection('messages')
+                      .doc(createChatDocumentID(
+                          loggedInUser!.email!, widget.userEmail))
+                      .collection('messages')
+                      .orderBy('timestamp')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator(
+                        color: Colors.transparent,
+                        strokeWidth: 4,
+                      );
+                    }
+
+                    final messages = snapshot.data?.docs.reversed;
+                    List<MessageBubble> messageBubbles = [];
+                    for (QueryDocumentSnapshot<Map<String, dynamic>> message
+                        in messages ?? []) {
+                      final messageText = message['text'];
+                      final messageSender = message['sender'];
+
+                      final currentUser = loggedInUser?.email;
+
+                      final messageBubble = MessageBubble(
+                        sender: messageSender,
+                        text: messageText,
+                        isMe: currentUser == messageSender,
+                      );
+                      messageBubbles.add(messageBubble);
+                    }
+
+                    return Expanded(
+                      child: ListView(
+                        reverse: true,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        children: messageBubbles,
+                      ),
+                    );
+                  }),
+            ]),
           ),
           Container(
             margin: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10),
@@ -71,30 +182,33 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: TextField(
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'Type your message here...',
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(36, 20, 104, 0.6),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                    ),
+                    controller: messageTextController,
+                    decoration: const InputDecoration(
+                        hintText: 'Type your message here...',
+                        hintStyle: TextStyle(
+                          color: Color.fromRGBO(36, 20, 104, 0.6),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: kColor3, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        focusedBorder: GradientOutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                            gradient: LinearGradient(
+                              colors: [kColor1, kColor2],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              tileMode: TileMode.clamp,
+                            ),
+                            width: 2.0)),
                   ),
                 ),
                 SizedBox(
@@ -105,11 +219,25 @@ class _ChatScreenState extends State<ChatScreen> {
                     gradient: gradient,
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Icon(
-                    Icons.send,
+                  child: IconButton(
+                    icon: Icon(Icons.send),
                     color: Colors.white,
+                    onPressed: () {
+                      _fireStore
+                          .collection('messages')
+                          .doc(createChatDocumentID(
+                              loggedInUser!.email!, widget.userEmail))
+                          .collection('messages')
+                          .add({
+                        'text': messageTextController.text,
+                        'sender': loggedInUser?.email,
+                        'receiver': widget.userEmail,
+                        'timestamp': FieldValue.serverTimestamp(),
+                      });
+
+                      messageTextController.clear();
+                    },
                   ),
-                  padding: EdgeInsets.all(10.0),
                 ),
               ],
             ),
