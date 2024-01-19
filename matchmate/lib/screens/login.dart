@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:matchmate/components/constants.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/components/textfield.dart';
-import 'package:matchmate/screens/landing_page.dart';
 import '../components/appbar1.dart';
 import '../components/image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
