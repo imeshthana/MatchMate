@@ -86,7 +86,8 @@ class _CreateAccountState extends State<CreateAccount> {
                               },
                               child: Text(
                                 'Close',
-                                style: TextStyle(color: kColor1, fontSize: 20),
+                                style:
+                                    TextStyle(color: kColor1, fontSize: 20),
                               ),
                             ),
                           ],

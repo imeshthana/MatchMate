@@ -291,8 +291,8 @@ class _EditProfileState extends State<EditProfile> {
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
-                          border:
-                              GradientBoxBorder(gradient: gradient, width: 2.5),
+                          border: GradientBoxBorder(
+                              gradient: gradient, width: 2.5),
                         ),
                         child: DropdownButton(
                             isExpanded: true,
@@ -422,7 +422,8 @@ class _EditProfileState extends State<EditProfile> {
                           .map(
                             (preference) => Chip(
                               deleteIconColor: kColor1,
-                              backgroundColor: Color.fromRGBO(199, 0, 57, 0.8),
+                              backgroundColor:
+                                  Color.fromRGBO(199, 0, 57, 0.8),
                               label: Text(
                                 preference,
                                 style: TextStyle(
@@ -470,7 +471,8 @@ class _EditProfileState extends State<EditProfile> {
                 var storageRef =
                     FirebaseStorage.instance.ref().child('$imageName.jpg');
                 var uploadTask = storageRef.putFile(_image!);
-                var downloadUrl = await (await uploadTask).ref.getDownloadURL();
+                var downloadUrl =
+                    await (await uploadTask).ref.getDownloadURL();
 
                 setState(() {
                   imageUrl = downloadUrl.toString();

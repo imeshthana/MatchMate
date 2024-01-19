@@ -180,14 +180,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void deleteMessage(String messageId) async {
-  await _fireStore
-      .collection('messages')
-      .doc(createChatDocumentID(loggedInUser!.email!, widget.userEmail))
-      .collection('messages')
-      .doc(messageId)
-      .delete();
-}
-
+    await _fireStore
+        .collection('messages')
+        .doc(createChatDocumentID(loggedInUser!.email!, widget.userEmail))
+        .collection('messages')
+        .doc(messageId)
+        .delete();
+  }
 
   void bottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -367,8 +366,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Expanded(
                       child: ListView(
                         reverse: true,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20),
                         children: messageBubbles,
                       ),
                     );
@@ -393,11 +392,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 15.0),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: kColor3, width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0)),
                         ),
                         focusedBorder: GradientOutlineInputBorder(
                             borderRadius:

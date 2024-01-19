@@ -342,7 +342,8 @@ class _Userdetails2State extends State<Userdetails2> {
           MainButton(
             text: 'Create Your Account',
             onPress: () async {
-              var imageName = DateTime.now().millisecondsSinceEpoch.toString();
+              var imageName =
+                  DateTime.now().millisecondsSinceEpoch.toString();
               var storageRef =
                   FirebaseStorage.instance.ref().child('$imageName.jpg');
               var uploadTask = storageRef.putFile(_image!);
@@ -369,8 +370,10 @@ class _Userdetails2State extends State<Userdetails2> {
                 'image': imageUrl,
               });
 
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MatchMates()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MatchMates()));
 
               showDialog(
                 context: context,
