@@ -80,6 +80,19 @@ class _FavouritesState extends State<Favourites> {
     return userSnapshot['firstname'];
   }
 
+  Future<Map<String, dynamic>> fetchFavouritesInfo(
+      String favouritesMail) async {
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('profiles')
+        .doc(favouritesMail)
+        .get();
+
+    return {
+      'name': userSnapshot['firstname'],
+      'image': userSnapshot['image'],
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -108,15 +121,17 @@ class _FavouritesState extends State<Favourites> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: favourites.length,
                         itemBuilder: (context, index) {
-                          return FutureBuilder<String>(
-                            future: fetchFavoritesName(favourites[index]),
+                          return FutureBuilder<Map<String, dynamic>>(
+                            future: fetchFavouritesInfo(favourites[index]),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return CircularProgressIndicator(
-                                  color: kColor4,
-                                  strokeWidth: 4,
+                                  color: Color.fromRGBO(199, 0, 57, 0.8),
                                 );
                               } else {
+                                String name = snapshot.data!['name'];
+                                String image = snapshot.data!['image'];
                                 return Container(
                                   margin: EdgeInsets.only(
                                       top: 10, bottom: 10, left: 5, right: 0),
@@ -127,8 +142,8 @@ class _FavouritesState extends State<Favourites> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(5.0),
-                                        child: Image.asset(
-                                          'assets/1.jpg',
+                                        child: Image.network(
+                                          image,
                                           fit: BoxFit.fill,
                                           height: 60,
                                           width: 45,
@@ -152,7 +167,7 @@ class _FavouritesState extends State<Favourites> {
                                                       top: 20,
                                                       bottom: 20),
                                                   child: Text(
-                                                    snapshot.data!,
+                                                    name,
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,

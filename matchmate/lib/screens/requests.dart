@@ -70,13 +70,16 @@ class _RequestsState extends State<Requests> {
     });
   }
 
-  Future<String> fetchRequestsName(String favouritesMail) async {
+  Future<Map<String, dynamic>> fetchRequestsInfo(String favouritesMail) async {
     DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('profiles')
         .doc(favouritesMail)
         .get();
 
-    return userSnapshot['firstname'];
+    return {
+      'name': userSnapshot['firstname'],
+      'image': userSnapshot['image'],
+    };
   }
 
   void addToFavourites(String userEmail) async {
@@ -135,8 +138,8 @@ class _RequestsState extends State<Requests> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: requests.length,
                         itemBuilder: (context, index) {
-                          return FutureBuilder<String>(
-                            future: fetchRequestsName(requests[index]),
+                          return FutureBuilder<Map<String, dynamic>>(
+                            future: fetchRequestsInfo(requests[index]),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -144,6 +147,8 @@ class _RequestsState extends State<Requests> {
                                   color: Color.fromRGBO(199, 0, 57, 0.8),
                                 );
                               } else {
+                                String name = snapshot.data!['name'];
+                                String image = snapshot.data!['image'];
                                 return Container(
                                   margin: EdgeInsets.only(
                                       top: 10, bottom: 10, left: 5, right: 0),
@@ -154,8 +159,8 @@ class _RequestsState extends State<Requests> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(5.0),
-                                        child: Image.asset(
-                                          'assets/1.jpg',
+                                        child: Image.network(
+                                          image,
                                           fit: BoxFit.fill,
                                           height: 60,
                                           width: 45,
@@ -179,7 +184,7 @@ class _RequestsState extends State<Requests> {
                                                       top: 20,
                                                       bottom: 20),
                                                   child: Text(
-                                                    snapshot.data!,
+                                                    name,
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16,
@@ -334,7 +339,6 @@ class _RequestsState extends State<Requests> {
                                                       );
                                                     },
                                                   ),
-
                                                 ],
                                               ),
                                             ],

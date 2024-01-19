@@ -58,186 +58,190 @@ class _Userdetails1State extends State<Userdetails1> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const Appbar(),
-      body: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        padding: const EdgeInsets.all(30.0),
-
-        children: [
-          const MainImage(),
-          const SizedBox(
-            height: 30,
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ReusableTextField(
-                    null, false, firstNameController, "First Name", null),
-                const SizedBox(height: 20),
-                ReusableTextField(
-                    null, false, lastNameController, "Last Name", null),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            child: Row(
-              children: [
-                Text(
-                  'You are a',
-                  style: textStyle,
-                ),
-                // SizedBox(
-                //   width: 10,
-                // ),
-                Spacer(),
-                Expanded(
-                  child: ReusableCard(
-                    onPress: () {
-                      setState(() {
-                        selectedGender = Gender.male;
-                      });
-                    },
-                    decoration: selectedGender == Gender.male
-                        ? BoxDecoration(
-                            gradient: gradient,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                                color: Colors.transparent, width: 2.0))
-                        : BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: GradientBoxBorder(
-                                gradient: gradient, width: 2.0),
-                          ),
-                    cardChild: Text(
-                      'Male',
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: selectedGender == Gender.male
-                            ? Colors.white
-                            : Color.fromRGBO(36, 20, 104, 0.5),
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: ReusableCard(
-                    onPress: () {
-                      setState(() {
-                        selectedGender = Gender.female;
-                      });
-                    },
-                    decoration: selectedGender == Gender.female
-                        ? BoxDecoration(
-                            gradient: gradient,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(
-                                color: Colors.transparent, width: 2.0))
-                        : BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: GradientBoxBorder(
-                                gradient: gradient, width: 2.0),
-                          ),
-                    cardChild: Text(
-                      'Female',
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: selectedGender == Gender.female
-                            ? Colors.white
-                            : Color.fromRGBO(36, 20, 104, 0.5),
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Your Age',
-                style: textStyle,
+              const MainImage(),
+              const SizedBox(
+                height: 30,
               ),
-              Spacer(),
               Container(
-                child: Container(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          age--;
-                        });
-                      },
-                      child: Icon(
-                        FontAwesomeIcons.minus,
-                        color: Colors.black,
-                      ),
+                    ReusableTextField(
+                        null, false, firstNameController, "First Name", null),
+                    const SizedBox(height: 20),
+                    ReusableTextField(
+                        null, false, lastNameController, "Last Name", null),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                child: Row(
+                  children: [
+                    Text(
+                      'You are a',
+                      style: textStyle,
                     ),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          age.toString(),
+                    // SizedBox(
+                    //   width: 10,
+                    // ),
+                    Spacer(),
+                    Expanded(
+                      child: ReusableCard(
+                        onPress: () {
+                          setState(() {
+                            selectedGender = Gender.male;
+                          });
+                        },
+                        decoration: selectedGender == Gender.male
+                            ? BoxDecoration(
+                                gradient: gradient,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                    color: Colors.transparent, width: 2.0))
+                            : BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: GradientBoxBorder(
+                                    gradient: gradient, width: 2.0),
+                              ),
+                        cardChild: Text(
+                          'Male',
                           style: TextStyle(
-                            fontSize: 17.5,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
+                            fontSize: 15.0,
+                            color: selectedGender == Gender.male
+                                ? Colors.white
+                                : Color.fromRGBO(36, 20, 104, 0.5),
+                            fontWeight: FontWeight.w700,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      decoration: BoxDecoration(
-                        gradient: gradient,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          age++;
-                        });
-                      },
-                      child: Icon(
-                        FontAwesomeIcons.plus,
-                        color: Colors.black,
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: ReusableCard(
+                        onPress: () {
+                          setState(() {
+                            selectedGender = Gender.female;
+                          });
+                        },
+                        decoration: selectedGender == Gender.female
+                            ? BoxDecoration(
+                                gradient: gradient,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                    color: Colors.transparent, width: 2.0))
+                            : BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: GradientBoxBorder(
+                                    gradient: gradient, width: 2.0),
+                              ),
+                        cardChild: Text(
+                          'Female',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: selectedGender == Gender.female
+                                ? Colors.white
+                                : Color.fromRGBO(36, 20, 104, 0.5),
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ],
-                )),
+                ),
               ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    'Your Age',
+                    style: textStyle,
+                  ),
+                  Spacer(),
+                  Container(
+                    child: Container(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              age--;
+                            });
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.minus,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              age.toString(),
+                              style: TextStyle(
+                                fontSize: 17.5,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: gradient,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              age++;
+                            });
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.plus,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ReusableTextField(null, false, occupationController,
+                  "You are a 'Developer' etc.", null),
+              const SizedBox(height: 20),
+              MainButton(
+                text: 'NEXT',
+                onPress: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Userdetails2(
+                          userEmail: widget.userEmail,
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text,
+                          age: age,
+                          gender:
+                              selectedGender == Gender.male ? 'male' : 'female',
+                          occupation: occupationController.text,
+                        ),
+                      ));
+                },
+              )
             ],
           ),
-          const SizedBox(height: 20),
-          ReusableTextField(null, false, occupationController,
-              "You are a 'Developer' etc.", null),
-          const SizedBox(height: 20),
-          MainButton(
-            text: 'NEXT',
-            onPress: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Userdetails2(
-                      userEmail: widget.userEmail,
-                      firstName: firstNameController.text,
-                      lastName: lastNameController.text,
-                      age: age,
-                      gender: selectedGender == Gender.male ? 'male' : 'female',
-                      occupation: occupationController.text,
-                    ),
-                  ));
-            },
-          )
-        ],
+        ),
       ),
     );
   }
