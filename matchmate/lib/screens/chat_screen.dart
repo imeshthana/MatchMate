@@ -179,6 +179,16 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void deleteMessage(String messageId) async {
+  await _fireStore
+      .collection('messages')
+      .doc(createChatDocumentID(loggedInUser!.email!, widget.userEmail))
+      .collection('messages')
+      .doc(messageId)
+      .delete();
+}
+
+
   void bottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -345,32 +355,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       final currentUser = loggedInUser?.email;
 
                       final messageBubble = MessageBubble(
+                        messageId: message.id,
                         sender: messageSender,
                         text: messageText,
                         isMe: currentUser == messageSender,
+                        deleteMessage: () => deleteMessage(message.id),
                       );
                       messageBubbles.add(messageBubble);
-
-                      // if (messageImage != null) {
-                      //   // Check if 'image' is not an empty string
-                      //   if (messageImage.isNotEmpty) {
-                      //     final messageBubble = MessageBubble(
-                      //       sender: messageSender,
-                      //       text: '',
-                      //       isMe: currentUser == messageSender,
-                      //       imageUrl: messageImage,
-                      //     );
-                      //     messageBubbles.add(messageBubble);
-                      //   }
-                      // } else {
-                      //   final messageBubble = MessageBubble(
-                      //     sender: messageSender,
-                      //     imageUrl: '',
-                      //     text: messageText,
-                      //     isMe: currentUser == messageSender,
-                      //   );
-                      //   messageBubbles.add(messageBubble);
-                      // }
                     }
 
                     return Expanded(
