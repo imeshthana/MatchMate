@@ -9,9 +9,6 @@ class Profile {
   String state;
   String bio;
   List<String> preferences;
-    List<String> favourites;
-      List<String> requests;
-        List<String> pendings;
   String profilePicture;
 
   Profile({
@@ -26,8 +23,5 @@ class Profile {
     required this.bio,
     required this.preferences,
     required this.profilePicture,
-    required this.favourites,
-    required this.requests,
-    required this.pendings,
   });
 }

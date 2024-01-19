@@ -154,251 +154,243 @@ class _Userdetails2State extends State<Userdetails2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
+      body: ListView(
+        padding: const EdgeInsets.all(20.0),
+        children: [
+          Column(
             children: [
-              Column(
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Your Country",
-                          style: textStyle,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                            border: GradientBoxBorder(
-                                gradient: gradient, width: 2.5),
-                          ),
-                          child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedCountry,
-                              underline: Container(),
-                              menuMaxHeight: 350,
-                              items: countries
-                                  .map((String country) => DropdownMenuItem(
-                                      value: country,
-                                      child: Text(
-                                        country,
-                                        style: textStyle,
-                                      )))
-                                  .toList(),
-                              onChanged: (selectedValue) {
-                                setState(() {
-                                  selectedCountry = selectedValue!;
-                                });
-                                if (selectedCountry != 'Select Country') {
-                                  getStates();
-                                }
-                              }),
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    child: Text(
+                      "Your Country",
+                      style: textStyle,
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Your State",
-                          style: textStyle,
-                        ),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                        border:
+                            GradientBoxBorder(gradient: gradient, width: 2.5),
                       ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(10),
-                              border: GradientBoxBorder(
-                                  gradient: gradient, width: 2.5)),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: selectedState,
-                            underline: Container(),
-                            menuMaxHeight: 350,
-                            items: states
-                                .map((String state) => DropdownMenuItem(
-                                    value: state,
-                                    child: Text(
-                                      state,
-                                      style: textStyle,
-                                    )))
-                                .toList(),
-                            onChanged: (selectedValue) {
-                              setState(() {
-                                selectedState = selectedValue!;
-                              });
-                              if (selectedState != 'Select State') {
-                                getCities();
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                      child: DropdownButton(
+                          isExpanded: true,
+                          value: selectedCountry,
+                          underline: Container(),
+                          menuMaxHeight: 350,
+                          items: countries
+                              .map((String country) => DropdownMenuItem(
+                                  value: country,
+                                  child: Text(
+                                    country,
+                                    style: textStyle,
+                                  )))
+                              .toList(),
+                          onChanged: (selectedValue) {
+                            setState(() {
+                              selectedCountry = selectedValue!;
+                            });
+                            if (selectedCountry != 'Select Country') {
+                              getStates();
+                            }
+                          }),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 25),
-              TextField(
-                controller: bioController,
-                decoration: InputDecoration(
-                  hintText: 'Add Your Bio',
-                  hintStyle: hintTextStyle,
-                  border: GradientOutlineInputBorder(
-                    gradient: gradient,
-                    width: 2.5,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Your State",
+                      style: textStyle,
                     ),
                   ),
-                ),
-                maxLines: 4,
-              ),
-              const SizedBox(height: 25),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                    border: GradientBoxBorder(gradient: gradient, width: 2.5)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: preferenceController,
-                        decoration: InputDecoration(
-                          hintText: 'Add Preference',
-                          hintStyle: hintTextStyle,
-                          border: InputBorder.none,
-                          suffixIcon: IconButton(
-                              icon: ShaderMask(
-                                shaderCallback: (Rect bounds) {
-                                  return gradient.createShader(bounds);
-                                },
-                                child: Icon(
-                                  Icons.add,
-                                  size: 30.0,
-                                ),
-                              ),
-                              onPressed: () {
-                                addPreference();
-                              }),
-                        ),
-                      ),
-                      Wrap(
-                        spacing: 8.0,
-                        runSpacing: 0,
-                        children: preferences
-                            .map(
-                              (preference) => Chip(
-                                deleteIconColor: kColor1,
-                                backgroundColor:
-                                    Color.fromRGBO(199, 0, 57, 0.8),
-                                label: Text(
-                                  preference,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                onDeleted: () {
-                                  removePreference(preference);
-                                },
-                              ),
-                            )
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: GradientBoxBorder(
+                              gradient: gradient, width: 2.5)),
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: selectedState,
+                        underline: Container(),
+                        menuMaxHeight: 350,
+                        items: states
+                            .map((String state) => DropdownMenuItem(
+                                value: state,
+                                child: Text(
+                                  state,
+                                  style: textStyle,
+                                )))
                             .toList(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Set Your Profile Picture",
-                  style: textStyle,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              ImagePickerWidget(
-                onImageSelected: (File image) {
-                  _image = image;
-                },
-              ),
-              Spacer(),
-              MainButton(
-                text: 'Create Your Account',
-                onPress: () async {
-                  var imageName =
-                      DateTime.now().millisecondsSinceEpoch.toString();
-                  var storageRef = FirebaseStorage.instance
-                      .ref()
-                      .child('$imageName.jpg');
-                  var uploadTask = storageRef.putFile(_image!);
-                  var downloadUrl =
-                      await (await uploadTask).ref.getDownloadURL();
-
-                  setState(() {
-                    imageUrl = downloadUrl.toString();
-                  });
-
-                  await _fireStore
-                      .collection('profiles')
-                      .doc(loggedInUser?.email)
-                      .set({
-                    'email': loggedInUser?.email,
-                    'firstname': widget.firstName,
-                    'lastname': widget.lastName,
-                    'age': widget.age,
-                    'gender': widget.gender,
-                    'occupation': widget.occupation,
-                    'country': selectedCountry,
-                    'state': selectedState,
-                    'bio': bioController.text,
-                    'preferences': preferences,
-                    'image': imageUrl,
-                  });
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MatchMates()));
-
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      title: Center(
-                        child: Text(
-                            'Successfully registered as ${loggedInUser?.email}',
-                            textAlign: TextAlign.center,
-                            style: textStyle),
+                        onChanged: (selectedValue) {
+                          setState(() {
+                            selectedState = selectedValue!;
+                          });
+                          if (selectedState != 'Select State') {
+                            getCities();
+                          }
+                        },
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 20,
-              )
             ],
           ),
-        ),
+          const SizedBox(height: 25),
+          TextField(
+            controller: bioController,
+            decoration: InputDecoration(
+              hintText: 'Add Your Bio',
+              hintStyle: hintTextStyle,
+              border: GradientOutlineInputBorder(
+                gradient: gradient,
+                width: 2.5,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+            ),
+            maxLines: 4,
+          ),
+          const SizedBox(height: 25),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+                border: GradientBoxBorder(gradient: gradient, width: 2.5)),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: preferenceController,
+                    decoration: InputDecoration(
+                      hintText: 'Add Preference',
+                      hintStyle: hintTextStyle,
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                          icon: ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return gradient.createShader(bounds);
+                            },
+                            child: Icon(
+                              Icons.add,
+                              size: 30.0,
+                            ),
+                          ),
+                          onPressed: () {
+                            addPreference();
+                          }),
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 0,
+                    children: preferences
+                        .map(
+                          (preference) => Chip(
+                            deleteIconColor: kColor1,
+                            backgroundColor: Color.fromRGBO(199, 0, 57, 0.8),
+                            label: Text(
+                              preference,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            onDeleted: () {
+                              removePreference(preference);
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Set Your Profile Picture",
+              style: textStyle,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          ImagePickerWidget(
+            onImageSelected: (File image) {
+              _image = image;
+            },
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          MainButton(
+            text: 'Create Your Account',
+            onPress: () async {
+              var imageName = DateTime.now().millisecondsSinceEpoch.toString();
+              var storageRef =
+                  FirebaseStorage.instance.ref().child('$imageName.jpg');
+              var uploadTask = storageRef.putFile(_image!);
+              var downloadUrl = await (await uploadTask).ref.getDownloadURL();
+
+              setState(() {
+                imageUrl = downloadUrl.toString();
+              });
+
+              await _fireStore
+                  .collection('profiles')
+                  .doc(loggedInUser?.email)
+                  .set({
+                'email': loggedInUser?.email,
+                'firstname': widget.firstName,
+                'lastname': widget.lastName,
+                'age': widget.age,
+                'gender': widget.gender,
+                'occupation': widget.occupation,
+                'country': selectedCountry,
+                'state': selectedState,
+                'bio': bioController.text,
+                'preferences': preferences,
+                'image': imageUrl,
+              });
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MatchMates()));
+
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  title: Center(
+                    child: Text(
+                        'Successfully registered as ${loggedInUser?.email}',
+                        textAlign: TextAlign.center,
+                        style: textStyle),
+                  ),
+                ),
+              );
+            },
+          ),
+          SizedBox(
+            height: 20,
+          )
+        ],
       ),
     );
   }

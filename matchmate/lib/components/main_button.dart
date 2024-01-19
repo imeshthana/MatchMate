@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matchmate/components/constants.dart';
 
 class MainButton extends StatelessWidget {
   MainButton({required this.text, required this.onPress});
@@ -9,14 +10,17 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width:   MediaQuery.of(context).size.width * 0.55,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff241468), Color(0xFFC70039)],
-        ),
+        gradient: gradient,
         borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 20,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
       child: TextButton(
         onPressed: onPress,
@@ -27,7 +31,7 @@ class MainButton extends StatelessWidget {
             ),
           ),
           minimumSize: MaterialStateProperty.all<Size>(
-            Size(170.0, 40.0),
+            Size(150.0, 40.0),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),

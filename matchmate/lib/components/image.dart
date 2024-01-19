@@ -11,7 +11,6 @@ class MainImage extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.25,
       child: Image.asset(
         "assets/logo.jpg",
-        //height: 350,
       ),
     );
   }

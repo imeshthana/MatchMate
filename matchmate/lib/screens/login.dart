@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matchmate/components/constants.dart';
 import 'package:matchmate/components/main_button.dart';
 import 'package:matchmate/components/textfield.dart';
-
+import 'package:matchmate/screens/landing_screen.dart';
 import 'package:matchmate/screens/match_mates.dart';
 import '../components/appbar2.dart';
 import '../components/image.dart';

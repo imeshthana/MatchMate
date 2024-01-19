@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:matchmate/screens/landing_page.dart';
+import 'package:matchmate/screens/landing_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:matchmate/screens/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,13 +12,11 @@ void main() async {
           messagingSenderId: '801264951582',
           projectId: 'matchmate-cpbio8292',
           storageBucket: 'matchmate-cpbio8292.appspot.com'));
-
-        
-  runApp(const MyApp());
+  runApp(const MatchMate());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MatchMate extends StatelessWidget {
+  const MatchMate({super.key});
 
   @override
   Widget build(BuildContext context) {
