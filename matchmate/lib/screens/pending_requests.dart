@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/appbar1.dart';
+import 'package:matchmate/screens/profile.dart';
 import '../components/constants.dart';
 import '../components/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -133,7 +134,7 @@ class _PendingState extends State<Pending> {
                                         borderRadius:
                                             BorderRadius.circular(5.0),
                                         child: Image.network(
-                                          image, // Use the retrieved image string here
+                                          image,
                                           fit: BoxFit.fill,
                                           height: 60,
                                           width: 45,
@@ -151,18 +152,25 @@ class _PendingState extends State<Pending> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 15,
-                                                      top: 20,
-                                                      bottom: 20),
-                                                  child: Text(
-                                                    name,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Profile(
+                                                        userEmail:
+                                                            pendings[index]);
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 15,
+                                                        top: 20,
+                                                        bottom: 20),
+                                                    child: Text(
+                                                      name,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

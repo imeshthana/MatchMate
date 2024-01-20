@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_borders/input_borders/gradient_outline_input_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matchmate/components/message_bubble.dart';
+import 'package:matchmate/screens/profile.dart';
 import 'package:matchmate/screens/favourites_screen.dart';
 import '../components/constants.dart';
 import 'package:crypto/crypto.dart';
@@ -280,24 +281,31 @@ class _ChatScreenState extends State<ChatScreen> {
                   bottomRight: Radius.circular(20)),
               gradient: gradient),
         ),
-        title: Container(
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 20.0,
-                backgroundImage: NetworkImage('$favouritesImage'),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                '$favouritesFirstName $favouritesLastName',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ],
+        title: GestureDetector(
+          onTap: () {
+            Profile(
+              userEmail: widget.userEmail,
+            );
+          },
+          child: Container(
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage('$favouritesImage'),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  '$favouritesFirstName $favouritesLastName',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
           ),
         ),
         automaticallyImplyLeading: false,
@@ -366,8 +374,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Expanded(
                       child: ListView(
                         reverse: true,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                         children: messageBubbles,
                       ),
                     );
@@ -392,13 +400,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 15.0),
                         border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: kColor3, width: 2.0),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
                         focusedBorder: GradientOutlineInputBorder(
                             borderRadius:

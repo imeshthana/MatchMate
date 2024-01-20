@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matchmate/components/appbar1.dart';
 import 'package:matchmate/screens/chat_screen.dart';
+import 'package:matchmate/screens/profile.dart';
 import '../components/constants.dart';
 import '../components/search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -161,18 +162,25 @@ class _FavouritesState extends State<Favourites> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 15,
-                                                      top: 20,
-                                                      bottom: 20),
-                                                  child: Text(
-                                                    name,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Profile(
+                                                        userEmail:
+                                                            favourites[index]);
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 15,
+                                                        top: 20,
+                                                        bottom: 20),
+                                                    child: Text(
+                                                      name,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
