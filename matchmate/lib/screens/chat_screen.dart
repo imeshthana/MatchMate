@@ -281,31 +281,24 @@ class _ChatScreenState extends State<ChatScreen> {
                   bottomRight: Radius.circular(20)),
               gradient: gradient),
         ),
-        title: GestureDetector(
-          onTap: () {
-            Profile(
-              userEmail: widget.userEmail,
-            );
-          },
-          child: Container(
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage('$favouritesImage'),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  '$favouritesFirstName $favouritesLastName',
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
+        title: Container(
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 20.0,
+                backgroundImage: NetworkImage('$favouritesImage'),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                '$favouritesFirstName $favouritesLastName',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ],
           ),
         ),
         automaticallyImplyLeading: false,

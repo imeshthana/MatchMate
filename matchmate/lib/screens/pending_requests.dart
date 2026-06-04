@@ -152,25 +152,18 @@ class _PendingState extends State<Pending> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Profile(
-                                                        userEmail:
-                                                            pendings[index]);
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: 15,
-                                                        top: 20,
-                                                        bottom: 20),
-                                                    child: Text(
-                                                      name,
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 15,
+                                                      top: 20,
+                                                      bottom: 20),
+                                                  child: Text(
+                                                    name,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                 ),
